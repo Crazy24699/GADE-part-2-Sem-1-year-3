@@ -41,6 +41,7 @@ public class EntityBase : MonoBehaviour
             CellFunctionality CellScript;
             Collision.TryGetComponent<CellFunctionality>(out CellScript);
             CellScript.enabled = true;
+            CurrentPosition = CellScript.Location;
         }
     }
     private void OnTriggerExit2D(Collider2D Collision)

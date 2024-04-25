@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using System.Security.Authentication.ExtendedProtection;
+using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.SocialPlatforms.Impl;
 
@@ -114,7 +115,6 @@ public class WorldHandler : MonoBehaviour
     public void MouseFunctionalty()
     {
 
-
         if (Input.GetMouseButtonDown(1))
         {
             if (SelectedEntity != null)
@@ -139,48 +139,98 @@ public class WorldHandler : MonoBehaviour
             CellCursorLocation = RayHit.collider.gameObject.GetComponent<CellFunctionality>().Location;
         }
 
-        //if (Input.GetMouseButtonDown(0))
-        //{
-        //    if (HitCollider.CompareTag("Entity") && HitCollider.GetComponent<EntityBase>().TeamName == CurrentTeam.ToString()) 
-        //    {
-        //        SelectedEntity = RayHit.collider.gameObject;
-        //        SelectedEntity.GetComponent<SpriteRenderer>().color = Color.yellow;
-        //        Debug.Log("entity");
-        //    }
-        //    else if (HitCollider.gameObject.CompareTag("Cell") && SelectedEntity != null) 
-        //    {
-        //        Debug.Log("Finger");
-        //        HitCollider.GetComponent<CellFunctionality>().PopulateNearCellList(AreaCellHeight, AreaCellLength);
-
-        //    }
-
-        //}
-
         if (Input.GetMouseButtonDown(0))
         {
-            Debug.Log(HitCollider.gameObject.tag);
-            switch (HitCollider.gameObject.tag)
+            if (HitCollider.CompareTag("Entity") && HitCollider.GetComponent<EntityBase>().TeamName == CurrentTeam.ToString())
             {
-                case "Entity":
-                    Debug.Log("tag");
-                    if (HitCollider.GetComponent<EntityBase>().TeamName == CurrentTeam.ToString())
-                    {
-                        SelectedEntity = RayHit.collider.gameObject;
-                        SelectedEntity.GetComponent<SpriteRenderer>().color = Color.yellow;
-                        Debug.Log("entity");
-                    }
-                    break;
+                SelectedEntity = RayHit.collider.gameObject;
+                SelectedEntity.GetComponent<SpriteRenderer>().color = Color.yellow;
+                Debug.Log("entity");
+            }
+            else if (HitCollider.gameObject.CompareTag("Cell") && SelectedEntity != null)
+            {
+                HitCollider.gameObject.GetComponent<CellFunctionality>().enabled = true;
+                HitCollider.GetComponent<CellFunctionality>().PopulateNearCellList(AreaCellHeight, AreaCellLength);
+                CellFunctionality CellScript = HitCollider.GetComponent<CellFunctionality>();
+                
+                if (CellScript.NeighbourCells == null)
+                {
+                    Debug.Log("nia");
+                    CellScript.PopulateNearCellList(AreaCellHeight, AreaCellLength);
+                }
 
-                case "Cell":
-                    if (SelectedEntity != null)
+                if (CellScript.NeighbourCells.Contains(SelectedEntity.GetComponent<EntityBase>().CurrentPosition))
+                {
+                    Debug.Log("nia");
+                    SelectedEntity.transform.position = new Vector3(CellScript.WorldLocation.x, CellScript.WorldLocation.y);
+                }
+                else
+                {
+                    foreach (var Cell in CellScript.NeighbourCells)
                     {
-                        Debug.Log("Finger");
-                        HitCollider.GetComponent<CellFunctionality>().PopulateNearCellList(AreaCellHeight, AreaCellLength);
+                        Debug.Log($"Neighbour cells {Cell}");
                     }
-                    break;
+                }
+
             }
 
         }
+
+        //if (Input.GetMouseButtonDown(0))
+        //{
+        //    Debug.Log(HitCollider.gameObject.tag);
+        //    switch (HitCollider.gameObject.tag)
+        //    {
+        //        case "Entity":
+        //            Debug.Log("tag");
+        //            if (HitCollider.GetComponent<EntityBase>().TeamName == CurrentTeam.ToString())
+        //            {
+        //                SelectedEntity = RayHit.collider.gameObject;
+        //                SelectedEntity.GetComponent<SpriteRenderer>().color = Color.yellow;
+        //                Debug.Log("entity");
+        //            }
+
+        //            break;
+
+        //        case "Cell":
+
+        //            if (SelectedEntity != null)
+        //            {
+
+        //                CellFunctionality CellScript = HitCollider.GetComponent<CellFunctionality>();
+        //                Debug.Log("Finger");
+        //                if(CellScript.NeighbourCells == null)
+        //                {
+        //                    Debug.Log("nia");
+        //                    CellScript.PopulateNearCellList(AreaCellHeight, AreaCellLength);
+        //                }
+        //                Debug.Log(CellScript.NeighbourCells.Count);
+        //                foreach (var Cell in CellScript.NeighbourCells)
+        //                {
+        //                    Debug.Log($"Neighbour cells {Cell}");
+        //                }
+        //                if (CellScript.NeighbourCells.Contains(SelectedEntity.GetComponent<EntityBase>().CurrentPosition))
+        //                {
+        //                    Debug.Log("nia");
+        //                    SelectedEntity.transform.position = new Vector3(CellScript.Location.x, CellScript.Location.y);
+        //                }
+        //                else
+        //                {
+        //                    foreach (var Cell in CellScript.NeighbourCells)
+        //                    {
+        //                        Debug.Log($"Neighbour cells {Cell}");
+        //                    }
+        //                }
+        //                foreach (var Cell in CellScript.NeighbourCells)
+        //                {
+        //                    Debug.Log($"Neighbour cells {Cell}");
+        //                }
+        //            }
+
+        //            break;
+        //    }
+
+        //}
     }
     
 }

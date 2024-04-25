@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using Unity.VisualScripting;
 using UnityEngine;
 
 public class CellFunctionality : MonoBehaviour
@@ -7,9 +8,10 @@ public class CellFunctionality : MonoBehaviour
     [SerializeField]private SpriteRenderer Sprite;
 
     public Vector2Int Location;
+    public Vector2Int WorldLocation;
 
     public HashSet<Vector2Int> NeighbourCells = new HashSet<Vector2Int>();
-
+    public List<Vector2Int> NearCells = new List<Vector2Int>();
     public LayerMask HitLayers;
     // Start is called before the first frame update
     void Start()
@@ -21,6 +23,8 @@ public class CellFunctionality : MonoBehaviour
     private void FixedUpdate()
     {
         HandleMouse();
+        NearCells = NeighbourCells.ToListPooled();
+        WorldLocation = new Vector2Int(Mathf.RoundToInt(transform.position.x), Mathf.RoundToInt(transform.position.y));
     }
 
     public void HandleMouse()
@@ -54,13 +58,11 @@ public class CellFunctionality : MonoBehaviour
 
         foreach (var CellCord in Cells)
         {
-            Debug.Log(Cells.Count);
-            Debug.Log(CellCord);
 
             if (CellCord.x >= 0 && CellCord.y >= 0 && CellCord.y <= AreaHeight && CellCord.x <= AreaLength)
             {
                 NeighbourCells.Add(CellCord);
-                Debug.Log(CellCord);
+                //Debug.Log(CellCord);
             }
 
         }

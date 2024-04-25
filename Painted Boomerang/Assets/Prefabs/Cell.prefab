@@ -93,14 +93,15 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 4033228640488970289}
-  m_Enabled: 0
+  m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: dc8daa1f347ba73448184a4c9a2fea9d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   Sprite: {fileID: 0}
   Location: {x: 0, y: 0}
-  NeighbourCells: []
+  WorldLocation: {x: 0, y: 0}
+  NearCells: []
   HitLayers:
     serializedVersion: 2
     m_Bits: 2048
