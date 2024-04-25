@@ -6,16 +6,22 @@ using UnityEngine.Events;
 public class GameManager : MonoBehaviour
 {
     public static GameManager GameManagerInstance;
-
+    public bool GameStarted = false;
 
     public int CellSize;
 
+    
+
     void Start()
     {
-        GameManagerInstance = this;
+
         if(GameManagerInstance != null)
         {
             Destroy(this.gameObject);
+        }
+        else
+        {
+            GameManagerInstance = this;
         }
 
 
