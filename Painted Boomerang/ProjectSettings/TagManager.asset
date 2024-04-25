@@ -6,6 +6,8 @@ TagManager:
   tags:
   - BreakWall
   - BoundaryWall
+  - Cell
+  - Entity
   layers:
   - Default
   - TransparentFX
@@ -16,9 +18,9 @@ TagManager:
   - Break Wall
   - Boundary Wall
   - 
-  - 
-  - 
-  - 
+  - Constructs
+  - Pieces
+  - Cell
   - 
   - 
   - 
@@ -42,4 +44,10 @@ TagManager:
   m_SortingLayers:
   - name: Default
     uniqueID: 0
+    locked: 0
+  - name: Pieces
+    uniqueID: 1794326159
+    locked: 0
+  - name: Cells
+    uniqueID: 3647089941
     locked: 0
