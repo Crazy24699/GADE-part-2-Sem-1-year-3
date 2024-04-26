@@ -1,7 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
-using System.Security.Authentication.ExtendedProtection;
-using Unity.VisualScripting;
+using System.Linq;
 using UnityEngine;
 using UnityEngine.SocialPlatforms.Impl;
 
@@ -22,6 +21,7 @@ public class WorldHandler : MonoBehaviour
     public Vector2Int CellCursorLocation;
 
     public GameManager GameManagerScript;
+    public PopulateGrid PopulateScript;
 
     public LayerMask SelectableLayers;
 
@@ -47,6 +47,7 @@ public class WorldHandler : MonoBehaviour
         AreaCellHeight = AreaHeight / WorldCellSize;
         AreaCellLength = AreaLength / WorldCellSize;
 
+        PopulateScript = GameObject.FindObjectOfType<PopulateGrid>();
         StartCoroutine(GenerateGrid());
         CurrentTeam = Teams.Team1;
     }
@@ -59,6 +60,8 @@ public class WorldHandler : MonoBehaviour
         //Change to possibly be random
         int ObstructionWait = 5;
         int CurrentObstructionWait = 0;
+
+        HashSet<GameObject> Cells = new HashSet<GameObject>();
 
         for (int xCord = 0; xCord < AreaLength/ WorldCellSize; xCord++)
         {
@@ -79,7 +82,7 @@ public class WorldHandler : MonoBehaviour
                 SpawnedObject.GetComponent<CellFunctionality>().Location = new Vector2Int(xCord, yCord);
                 InitialStartArea(SpawnedObject, xCord, yCord);
 
-
+                Cells.Add(SpawnedObject);
                 #region RemoveRandomizer
 
                 if (CanPlaceObstructions && CurrentObstructionWait == 0)
@@ -106,9 +109,8 @@ public class WorldHandler : MonoBehaviour
 
                 #endregion
 
-
             }
-
+            PopulateScript.GridCells = Cells.ToList();
         }
     }
 
@@ -125,6 +127,7 @@ public class WorldHandler : MonoBehaviour
                     if (xCordRef > 0 && xCordRef < 3)
                     {
                         SpawnedObjectRef.GetComponent<SpriteRenderer>().color = Color.red;
+                        Debug.Log("Whenever it");
                     }
                     break;
 
@@ -132,6 +135,7 @@ public class WorldHandler : MonoBehaviour
                     if (xCordRef > AreaCellLength - 4 && xCordRef < AreaCellLength - 1)
                     {
                         SpawnedObjectRef.GetComponent<SpriteRenderer>().color = Color.green;
+                        Debug.Log("it rains");
                     }
                     break;
             }
