@@ -54,24 +54,61 @@ public class WorldHandler : MonoBehaviour
     public IEnumerator GenerateGrid()
     {
 
+        bool CanPlaceObstructions = true;
+
+        //Change to possibly be random
+        int ObstructionWait = 5;
+        int CurrentObstructionWait = 0;
+
         for (int xCord = 0; xCord < AreaLength/ WorldCellSize; xCord++)
         {
 
             for (int yCord = 0; yCord < AreaHeight/WorldCellSize; yCord++)
             {
                 yield return new WaitForSeconds(0.02f);
+
                 GameObject SpawnedObject = Instantiate(TilePrefab, new Vector3(xCord*4, yCord+10), Quaternion.identity);
                 SpawnedObject.name = $"Tile: x:{xCord} y:{yCord}";
                 SpawnedObject.transform.SetParent(GameObject.Find("PlayableGrid").transform);
                 SpawnedObject.transform.position = new Vector3((xCord * 4) - (AreaLength / 2) + 2f, (yCord * 4) - (AreaHeight / 2) + 2f);
+
                 if(yCord == 0 || yCord == AreaHeight / WorldCellSize-1 || xCord==0 || xCord== AreaLength / WorldCellSize-1)
                 {
                     SpawnedObject.name = $"Tile: x:{xCord} y:{yCord} First last";
                 }
                 SpawnedObject.GetComponent<CellFunctionality>().Location = new Vector2Int(xCord, yCord);
                 InitialStartArea(SpawnedObject, xCord, yCord);
+
+
+                #region RemoveRandomizer
+
+                if (CanPlaceObstructions && CurrentObstructionWait == 0)
+                {
+                    Debug.Log("Spin");
+                    CurrentObstructionWait = ObstructionWait;
+                    int Chance = Random.Range(0, 24);
+                    if (Chance <= 5)
+                    {
+                        int ObstructionCount = Random.Range(1, 3);
+                        PlaceObstructions(xCord, yCord, SpawnedObject, ObstructionCount);
+                    }
+                    //CanPlaceObstructions = false;
+                }
+                else if (!CanPlaceObstructions || CurrentObstructionWait > 0)
+                {
+                    CurrentObstructionWait -= 1;
+                }
+                else if (CurrentObstructionWait <= 0) 
+                {
+                    CurrentObstructionWait = 0;
+                    CanPlaceObstructions= true;
+                }
+
+                #endregion
+
+
             }
-            
+
         }
     }
 
@@ -102,9 +139,10 @@ public class WorldHandler : MonoBehaviour
         }
     }
 
-    protected void PlaceObstructions(int xCordRef, int yCordRef)
+    protected void PlaceObstructions(int xCordRef, int yCordRef, GameObject SpawnedObjectRef, int ObstructionCountRef)
     {
-        
+        SpawnedObjectRef.GetComponent<SpriteRenderer>().enabled = false;
+        Debug.Log("Prototype");
     }
 
     private void Update()

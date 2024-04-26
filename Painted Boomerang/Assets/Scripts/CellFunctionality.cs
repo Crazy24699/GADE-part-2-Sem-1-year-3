@@ -12,6 +12,9 @@ public class CellFunctionality : MonoBehaviour
 
     public HashSet<Vector2Int> NeighbourCells = new HashSet<Vector2Int>();
     public List<Vector2Int> NearCells = new List<Vector2Int>();
+
+    
+
     public LayerMask HitLayers;
     // Start is called before the first frame update
     void Start()
