@@ -16,6 +16,8 @@ public class WorldHandler : MonoBehaviour
     public GameObject LoadingScreenPanel;
     public GameObject SelectedEntity;
 
+    public HashSet<CellFunctionality> AllCells = new HashSet<CellFunctionality>();
+
     public string CurrentTag;
 
     public Vector2Int CellCursorLocation;
@@ -61,14 +63,14 @@ public class WorldHandler : MonoBehaviour
         int ObstructionWait = 5;
         int CurrentObstructionWait = 0;
 
-        HashSet<GameObject> Cells = new HashSet<GameObject>();
+        HashSet<CellFunctionality> Cells = new HashSet<CellFunctionality>();
 
         for (int xCord = 0; xCord < AreaLength/ WorldCellSize; xCord++)
         {
 
             for (int yCord = 0; yCord < AreaHeight/WorldCellSize; yCord++)
             {
-                yield return new WaitForSeconds(0.02f);
+                yield return new WaitForSeconds(0.005f);
 
                 GameObject SpawnedObject = Instantiate(TilePrefab, new Vector3(xCord*4, yCord+10), Quaternion.identity);
                 SpawnedObject.name = $"Tile: x:{xCord} y:{yCord}";
@@ -78,11 +80,12 @@ public class WorldHandler : MonoBehaviour
                 if(yCord == 0 || yCord == AreaHeight / WorldCellSize-1 || xCord==0 || xCord== AreaLength / WorldCellSize-1)
                 {
                     SpawnedObject.name = $"Tile: x:{xCord} y:{yCord} First last";
+                    SpawnedObject.GetComponent<CellFunctionality>().IsBorderCell = true;
                 }
                 SpawnedObject.GetComponent<CellFunctionality>().Location = new Vector2Int(xCord, yCord);
                 InitialStartArea(SpawnedObject, xCord, yCord);
-
-                Cells.Add(SpawnedObject);
+                
+                Cells.Add(SpawnedObject.GetComponent<CellFunctionality>());
                 #region RemoveRandomizer
 
                 if (CanPlaceObstructions && CurrentObstructionWait == 0)
@@ -93,7 +96,7 @@ public class WorldHandler : MonoBehaviour
                     if (Chance <= 5)
                     {
                         int ObstructionCount = Random.Range(1, 3);
-                        PlaceObstructions(xCord, yCord, SpawnedObject, ObstructionCount);
+                        
                     }
                     //CanPlaceObstructions = false;
                 }
@@ -108,10 +111,24 @@ public class WorldHandler : MonoBehaviour
                 }
 
                 #endregion
-
+                
             }
             PopulateScript.GridCells = Cells.ToList();
+            AllCells = Cells;
         }
+        yield return new WaitForSeconds(0.5f);
+        StartCoroutine(PopulateNearCells());
+        Debug.Log(AllCells.Count);
+    }
+
+    private IEnumerator PopulateNearCells()
+    {
+        foreach (CellFunctionality CellScript in AllCells)
+        {
+            yield return new WaitForSeconds(0.025f);
+            CellScript.PopulateNearCellList(AreaHeight, AreaLength);
+        }
+        //PopulateScript.PickWallSpots();
     }
 
     protected void InitialStartArea(GameObject SpawnedObjectRef, int xCordRef, int yCordRef)
@@ -127,6 +144,7 @@ public class WorldHandler : MonoBehaviour
                     if (xCordRef > 0 && xCordRef < 3)
                     {
                         SpawnedObjectRef.GetComponent<SpriteRenderer>().color = Color.red;
+                        SpawnedObjectRef.GetComponent<CellFunctionality>().StartingCell = true;
                         Debug.Log("Whenever it");
                     }
                     break;
@@ -135,6 +153,7 @@ public class WorldHandler : MonoBehaviour
                     if (xCordRef > AreaCellLength - 4 && xCordRef < AreaCellLength - 1)
                     {
                         SpawnedObjectRef.GetComponent<SpriteRenderer>().color = Color.green;
+                        SpawnedObjectRef.GetComponent<CellFunctionality>().StartingCell = true;
                         Debug.Log("it rains");
                     }
                     break;
@@ -143,11 +162,6 @@ public class WorldHandler : MonoBehaviour
         }
     }
 
-    protected void PlaceObstructions(int xCordRef, int yCordRef, GameObject SpawnedObjectRef, int ObstructionCountRef)
-    {
-        SpawnedObjectRef.GetComponent<SpriteRenderer>().enabled = false;
-        Debug.Log("Prototype");
-    }
 
     private void Update()
     {
@@ -195,20 +209,20 @@ public class WorldHandler : MonoBehaviour
                 HitCollider.GetComponent<CellFunctionality>().PopulateNearCellList(AreaCellHeight, AreaCellLength);
                 CellFunctionality CellScript = HitCollider.GetComponent<CellFunctionality>();
                 
-                if (CellScript.NeighbourCells == null)
+                if (CellScript.NeighbourCellsLocation == null)
                 {
                     Debug.Log("nia");
-                    CellScript.PopulateNearCellList(AreaCellHeight, AreaCellLength);
+                    //CellScript.PopulateNearCellList(AreaCellHeight, AreaCellLength);
                 }
 
-                if (CellScript.NeighbourCells.Contains(SelectedEntity.GetComponent<EntityBase>().CurrentPosition))
+                if (CellScript.NeighbourCellsLocation.Contains(SelectedEntity.GetComponent<EntityBase>().CurrentPosition))
                 {
                     Debug.Log("nia");
                     SelectedEntity.transform.position = new Vector3(CellScript.WorldLocation.x, CellScript.WorldLocation.y);
                 }
                 else
                 {
-                    foreach (var Cell in CellScript.NeighbourCells)
+                    foreach (var Cell in CellScript.NeighbourCellsLocation)
                     {
                         Debug.Log($"Neighbour cells {Cell}");
                     }
