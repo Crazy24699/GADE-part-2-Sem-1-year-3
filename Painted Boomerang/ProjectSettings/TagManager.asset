@@ -8,6 +8,7 @@ TagManager:
   - BoundaryWall
   - Cell
   - Entity
+  - Boomerang
   layers:
   - Default
   - TransparentFX
