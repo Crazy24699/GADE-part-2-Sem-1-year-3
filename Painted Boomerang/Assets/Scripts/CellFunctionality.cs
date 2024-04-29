@@ -22,7 +22,7 @@ public class CellFunctionality : MonoBehaviour
     public bool IsBorderCell = false;
     public bool StartingCell = false;
     [Space(5)]
-    public bool ContainsEntity;
+    public bool Populated;
     [Space(10)]
 
     private WorldHandler WorldScript;

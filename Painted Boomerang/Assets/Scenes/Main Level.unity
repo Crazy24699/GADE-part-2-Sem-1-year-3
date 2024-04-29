@@ -751,9 +751,10 @@ MonoBehaviour:
     m_Bits: 3584
   Entities: []
   TurnActive: 0
+  MoveTwo: 0
   ThisTeam: 1
   WorldHandlerScript: {fileID: 0}
-  TurnsText: {fileID: 0}
+  TurnsText: {fileID: 395370459}
   BoomerangIcon: {fileID: 8937828928543727559, guid: 29e9541b061fdce4eb500cfddfa33601, type: 3}
   MoveIcon: {fileID: 1742779154123619856, guid: f4b55a436d3909a4380118cac9690c76, type: 3}
   TrackedIcon: {fileID: 675563574}
@@ -1620,7 +1621,7 @@ RectTransform:
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 0.5, y: 0.5, z: 0.5}
-  m_ConstrainProportionsScale: 1
+  m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 360711066}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -3443,9 +3444,10 @@ MonoBehaviour:
     m_Bits: 3584
   Entities: []
   TurnActive: 1
+  MoveTwo: 0
   ThisTeam: 0
   WorldHandlerScript: {fileID: 0}
-  TurnsText: {fileID: 0}
+  TurnsText: {fileID: 395370459}
   BoomerangIcon: {fileID: 8937828928543727559, guid: 29e9541b061fdce4eb500cfddfa33601, type: 3}
   MoveIcon: {fileID: 1742779154123619856, guid: f4b55a436d3909a4380118cac9690c76, type: 3}
   TrackedIcon: {fileID: 675563574}

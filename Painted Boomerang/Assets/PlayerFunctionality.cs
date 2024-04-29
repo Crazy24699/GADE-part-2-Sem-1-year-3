@@ -11,12 +11,14 @@ public class PlayerFunctionality : MonoBehaviour
 
     public int MovesRemaining = 0;
     public Vector2Int CellCursorLocation;
+    
 
     public LayerMask SelectableLayers;
 
     public List<EntityBase> Entities;
 
     public bool TurnActive;
+    public bool MoveTwo;
 
     public WorldHandler.Teams ThisTeam;
     public WorldHandler WorldHandlerScript;
@@ -39,6 +41,7 @@ public class PlayerFunctionality : MonoBehaviour
         {
             return;
         }
+        TurnsText.text = $"Team {ThisTeam} Turn and have {MovesRemaining}";
         MouseFunctionalty();
         if (MovesRemaining <= 0)
         {
@@ -125,7 +128,7 @@ public class PlayerFunctionality : MonoBehaviour
             CellFunctionality CellScript = HitCollider.GetComponent<CellFunctionality>();
             EntityBase EntityScript = SelectedEntity.GetComponent<EntityBase>();
 
-            if (CellScript.ContainsEntity)
+            if (CellScript.Populated)
             {
 
                 return;
