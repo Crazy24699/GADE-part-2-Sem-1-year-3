@@ -8,16 +8,22 @@ public class CellFunctionality : MonoBehaviour
 {
     [SerializeField]private SpriteRenderer Sprite;
 
+    [Space(10)]
     public Vector2Int Location;
     public Vector2Int WorldLocation;
 
+    [Space(10)]
     public HashSet<Vector2Int> NeighbourCellsLocation = new HashSet<Vector2Int>();
     public HashSet<CellFunctionality> NeighbourCells = new HashSet<CellFunctionality>();
     public List<CellFunctionality> NearCells = new List<CellFunctionality>();
 
+    [Space(10)]
     public bool ObstacleNear = false;
     public bool IsBorderCell = false;
     public bool StartingCell = false;
+    [Space(5)]
+    public bool ContainsEntity;
+    [Space(10)]
 
     private WorldHandler WorldScript;
 

@@ -1,6 +1,8 @@
+using JetBrains.Annotations;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
+using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.SocialPlatforms.Impl;
 
@@ -8,24 +10,31 @@ public class WorldHandler : MonoBehaviour
 {
     const int AreaLength = 64;
     const int AreaHeight = 32;
+    const int MaxMoves = 2;
     private int AreaCellHeight;
     private int AreaCellLength;
     protected int WorldCellSize;
+    [Space(5)]
+    
 
+    [Space(10)]
+    public bool CanMakeMove;
+
+    [Space(10)]
     public GameObject TilePrefab;
     public GameObject LoadingScreenPanel;
-    public GameObject SelectedEntity;
 
+    [Space(5)]
+    public GameObject PlayPieceRef;
+
+    
+    [Space(10)]
     public HashSet<CellFunctionality> AllCells = new HashSet<CellFunctionality>();
-
-    public string CurrentTag;
-
-    public Vector2Int CellCursorLocation;
 
     public GameManager GameManagerScript;
     public PopulateGrid PopulateScript;
-
-    public LayerMask SelectableLayers;
+    public PlayerFunctionality Team1Script;
+    public PlayerFunctionality Team2Script;
 
     public enum Teams
     {
@@ -52,8 +61,10 @@ public class WorldHandler : MonoBehaviour
         PopulateScript = GameObject.FindObjectOfType<PopulateGrid>();
         StartCoroutine(GenerateGrid());
         CurrentTeam = Teams.Team1;
+
     }
 
+    #region Grid Generation
     public IEnumerator GenerateGrid()
     {
 
@@ -131,6 +142,9 @@ public class WorldHandler : MonoBehaviour
         //PopulateScript.PickWallSpots();
     }
 
+    /*Make the individual entities spawn into their respective team numbers, make the team numbers as parents within the world
+     that is then parented to a major parent that houses it all, this is just so it looks clean and better. */
+
     protected void InitialStartArea(GameObject SpawnedObjectRef, int xCordRef, int yCordRef)
     {
 
@@ -143,18 +157,14 @@ public class WorldHandler : MonoBehaviour
                 case true:
                     if (xCordRef > 0 && xCordRef < 3)
                     {
-                        SpawnedObjectRef.GetComponent<SpriteRenderer>().color = Color.red;
-                        SpawnedObjectRef.GetComponent<CellFunctionality>().StartingCell = true;
-                        Debug.Log("Whenever it");
+                        SpawnPieces(SpawnedObjectRef,Teams.Team1);
                     }
                     break;
 
                 case false:
                     if (xCordRef > AreaCellLength - 4 && xCordRef < AreaCellLength - 1)
                     {
-                        SpawnedObjectRef.GetComponent<SpriteRenderer>().color = Color.green;
-                        SpawnedObjectRef.GetComponent<CellFunctionality>().StartingCell = true;
-                        Debug.Log("it rains");
+                        SpawnPieces(SpawnedObjectRef,Teams.Team2);
                     }
                     break;
             }
@@ -162,131 +172,52 @@ public class WorldHandler : MonoBehaviour
         }
     }
 
-
-    private void Update()
+    public void SpawnPieces(GameObject ObjectRef, Teams ThisTeam)
     {
-        MouseFunctionalty();
+        GameObject SpawnedPiece;
+        SpawnedPiece = Instantiate(PlayPieceRef, new Vector3(ObjectRef.transform.position.x, ObjectRef.transform.position.y, -1), Quaternion.identity);
+
+
+        ObjectRef.GetComponent<CellFunctionality>().StartingCell = true;
+        SpawnedPiece.GetComponent<EntityBase>().AssignedTeam = ThisTeam;
+        switch (ThisTeam)
+        {
+            case Teams.Team1:
+                ObjectRef.GetComponent<SpriteRenderer>().color = Color.green;
+                SpawnedPiece.transform.SetParent(Team1Script.transform);
+                Team1Script.Entities.Add(SpawnedPiece.GetComponent<EntityBase>());
+                break;
+
+            case Teams.Team2:
+                ObjectRef.GetComponent<SpriteRenderer>().color = Color.red;
+                SpawnedPiece.transform.SetParent(Team2Script.transform);
+                Team2Script.Entities.Add(SpawnedPiece.GetComponent<EntityBase>());
+                break;
+
+        }
     }
 
-    public void MouseFunctionalty()
+    #endregion
+
+    public void SetActivePlayer(Teams ActiveTeam)
     {
-
-        if (Input.GetMouseButtonDown(1))
+        switch (ActiveTeam)
         {
-            if (SelectedEntity != null)
-            {
-                SelectedEntity.GetComponent<SpriteRenderer>().color = Color.white;
-                SelectedEntity = null;
-            }
+            case Teams.Team2:
+                Team1Script.TurnActive = true;
+                Team2Script.TurnActive = false;
+                Team1Script.MovesRemaining = MaxMoves;
+                break;
+
+            case Teams.Team1:
+                Team2Script.TurnActive = true;
+                Team1Script.TurnActive = false;
+                Team2Script.MovesRemaining = MaxMoves;
+                break;
+
 
         }
-
-        RaycastHit2D RayHit = Physics2D.Raycast(Camera.main.ScreenToWorldPoint(Input.mousePosition), Vector2.zero, Mathf.Infinity, SelectableLayers);
-        Collider2D HitCollider = RayHit.collider;
-
-        if (HitCollider == null)
-        {
-            Debug.Log("Hit");
-            return;
-        }
-        CurrentTag = HitCollider.tag;
-        if (HitCollider.CompareTag("Cell"))
-        {
-            CellCursorLocation = RayHit.collider.gameObject.GetComponent<CellFunctionality>().Location;
-        }
-
-        if (Input.GetMouseButtonDown(0))
-        {
-            if (HitCollider.CompareTag("Entity") && HitCollider.GetComponent<EntityBase>().TeamName == CurrentTeam.ToString())
-            {
-                SelectedEntity = RayHit.collider.gameObject;
-                SelectedEntity.GetComponent<SpriteRenderer>().color = Color.yellow;
-                Debug.Log("entity");
-            }
-            else if (HitCollider.gameObject.CompareTag("Cell") && SelectedEntity != null)
-            {
-                HitCollider.gameObject.GetComponent<CellFunctionality>().enabled = true;
-                HitCollider.GetComponent<CellFunctionality>().PopulateNearCellList(AreaCellHeight, AreaCellLength);
-                CellFunctionality CellScript = HitCollider.GetComponent<CellFunctionality>();
-                
-                if (CellScript.NeighbourCellsLocation == null)
-                {
-                    Debug.Log("nia");
-                    //CellScript.PopulateNearCellList(AreaCellHeight, AreaCellLength);
-                }
-
-                if (CellScript.NeighbourCellsLocation.Contains(SelectedEntity.GetComponent<EntityBase>().CurrentPosition))
-                {
-                    Debug.Log("nia");
-                    SelectedEntity.transform.position = new Vector3(CellScript.WorldLocation.x, CellScript.WorldLocation.y);
-                }
-                else
-                {
-                    foreach (var Cell in CellScript.NeighbourCellsLocation)
-                    {
-                        Debug.Log($"Neighbour cells {Cell}");
-                    }
-                }
-
-            }
-
-        }
-
-        //if (Input.GetMouseButtonDown(0))
-        //{
-        //    Debug.Log(HitCollider.gameObject.tag);
-        //    switch (HitCollider.gameObject.tag)
-        //    {
-        //        case "Entity":
-        //            Debug.Log("tag");
-        //            if (HitCollider.GetComponent<EntityBase>().TeamName == CurrentTeam.ToString())
-        //            {
-        //                SelectedEntity = RayHit.collider.gameObject;
-        //                SelectedEntity.GetComponent<SpriteRenderer>().color = Color.yellow;
-        //                Debug.Log("entity");
-        //            }
-
-        //            break;
-
-        //        case "Cell":
-
-        //            if (SelectedEntity != null)
-        //            {
-
-        //                CellFunctionality CellScript = HitCollider.GetComponent<CellFunctionality>();
-        //                Debug.Log("Finger");
-        //                if(CellScript.NeighbourCells == null)
-        //                {
-        //                    Debug.Log("nia");
-        //                    CellScript.PopulateNearCellList(AreaCellHeight, AreaCellLength);
-        //                }
-        //                Debug.Log(CellScript.NeighbourCells.Count);
-        //                foreach (var Cell in CellScript.NeighbourCells)
-        //                {
-        //                    Debug.Log($"Neighbour cells {Cell}");
-        //                }
-        //                if (CellScript.NeighbourCells.Contains(SelectedEntity.GetComponent<EntityBase>().CurrentPosition))
-        //                {
-        //                    Debug.Log("nia");
-        //                    SelectedEntity.transform.position = new Vector3(CellScript.Location.x, CellScript.Location.y);
-        //                }
-        //                else
-        //                {
-        //                    foreach (var Cell in CellScript.NeighbourCells)
-        //                    {
-        //                        Debug.Log($"Neighbour cells {Cell}");
-        //                    }
-        //                }
-        //                foreach (var Cell in CellScript.NeighbourCells)
-        //                {
-        //                    Debug.Log($"Neighbour cells {Cell}");
-        //                }
-        //            }
-
-        //            break;
-        //    }
-
-        //}
     }
+    
     
 }
