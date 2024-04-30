@@ -8,17 +8,19 @@ using UnityEngine.UI;
 public class PlayerFunctionality : MonoBehaviour
 {
     public GameObject SelectedEntity;
+    public GameObject BoomerangObject;
+
 
     public int MovesRemaining = 0;
     public Vector2Int CellCursorLocation;
-    
 
+    public LayerMask ExclusionLayers;
     public LayerMask SelectableLayers;
 
     public List<EntityBase> Entities;
 
     public bool TurnActive;
-    public bool MoveTwo;
+    public bool CanPerformAction;
 
     public WorldHandler.Teams ThisTeam;
     public WorldHandler WorldHandlerScript;
@@ -33,6 +35,16 @@ public class PlayerFunctionality : MonoBehaviour
     {
         WorldHandlerScript = GameObject.FindObjectOfType<WorldHandler>();
 
+    }
+
+    public void TurnStart()
+    {
+        Debug.Log("Went");
+        foreach (EntityBase Entity in Entities)
+        {
+            Debug.Log("Active");
+            Entity.gameObject.GetComponent<Collider2D>().excludeLayers = ExclusionLayers;
+        }
     }
 
     private void Update()
@@ -54,8 +66,20 @@ public class PlayerFunctionality : MonoBehaviour
         if (MovesRemaining <= 0) 
         {
             MovesRemaining = 0;
+            foreach (EntityBase Entity in Entities)
+            {
+                Entity.gameObject.GetComponent<Collider2D>().excludeLayers = new LayerMask();
+            }
             WorldHandlerScript.SetActivePlayer(ThisTeam);
 
+        }
+    }
+
+    public void CheckPieces()
+    {
+        if(Entities.Count == 0)
+        {
+            WorldHandlerScript.EndGame(ThisTeam);
         }
     }
 
@@ -86,14 +110,14 @@ public class PlayerFunctionality : MonoBehaviour
             CellCursorLocation = HitCollider.gameObject.GetComponent<CellFunctionality>().Location;
         }
 
-        if (Input.GetMouseButtonDown(0)) 
+        if (Input.GetMouseButtonDown(0) && CanPerformAction) 
         {
-
             MoveSelection(HitCollider);
-            
+
             if(SelectedEntity != null && SelectedEntity.GetComponent<EntityBase>().MouseDistance>=8)
             {
-                ThrowBoomerang();
+                ThrowBoomerang(RayHit);
+                CanPerformAction = false;
             }
         }
         if(SelectedEntity != null)
@@ -145,17 +169,22 @@ public class PlayerFunctionality : MonoBehaviour
             {
                 foreach (var Cell in CellScript.NeighbourCellsLocation)
                 {
-                    Debug.Log($"Neighbour cells {Cell}");
+                    //Debug.Log($"Neighbour cells {Cell}");
                 }
             }
 
         }
     }
 
-    public void ThrowBoomerang()
+    public void ThrowBoomerang(RaycastHit2D RayHitRef)
     {
         Debug.Log("share the truth");
 
+        Vector2 MoveDirection = (RayHitRef.point - new Vector2(SelectedEntity.transform.position.x, SelectedEntity.transform.position.y)).normalized;
+        GameObject SpawnedBoomerang= Instantiate(BoomerangObject, SelectedEntity.transform.position, SelectedEntity.transform.rotation);
+        SpawnedBoomerang.GetComponent<Rigidbody2D>().velocity = MoveDirection*25;
+        SpawnedBoomerang.GetComponent<BoomerangFunctionality>().ParentEntity = SelectedEntity;
+        SpawnedBoomerang.GetComponent<BoomerangFunctionality>().ThisTeam = ThisTeam;
 
         //SelectedEntity = null;
     }

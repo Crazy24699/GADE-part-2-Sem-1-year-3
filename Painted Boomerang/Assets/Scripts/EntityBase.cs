@@ -11,7 +11,7 @@ public class EntityBase : MonoBehaviour
 
     public bool CanPerformAction = true;
 
-    public int MaxHealth;
+    const int MaxHealth=3;
     public int CurrentHealth;
 
     public Vector2Int CurrentPosition;
@@ -20,11 +20,12 @@ public class EntityBase : MonoBehaviour
     public int MouseDistance;
 
     public WorldHandler.Teams AssignedTeam;
+    public PlayerFunctionality PlayerScript;
 
     // Start is called before the first frame update
     void Start()
     {
-        
+        CurrentHealth = MaxHealth;
     }
 
     // Update is called once per frame
@@ -33,10 +34,6 @@ public class EntityBase : MonoBehaviour
         Vector2 MousePosition = Camera.main.ScreenToWorldPoint(Input.mousePosition);
         //MouseDistance = new Vector2Int(Mathf.RoundToInt(Mathf.Abs(MousePosition.x - transform.position.x)), Mathf.RoundToInt(Mathf.Abs(MousePosition.y - transform.position.y)));
         MouseDistance = Mathf.RoundToInt(Mathf.Abs(Vector2.Distance(this.transform.position, MousePosition)));
-        if (MouseDistance > 8)
-        {
-            HandleAiming();
-        }
     }
 
     public void MoveEntity(Vector2Int CellCord)
@@ -44,9 +41,17 @@ public class EntityBase : MonoBehaviour
         this.transform.position = new Vector3(CellCord.x, CellCord.y);
     }
 
-    public void HandleAiming()
+    public int HandleHealth(int HealthChange)
     {
-
+        CurrentHealth += HealthChange;
+        if(CurrentHealth <= 0)
+        {
+            CurrentHealth = 0;
+            PlayerScript.Entities.Remove(this);
+            PlayerScript.CheckPieces();
+            Destroy(this.gameObject);
+        }
+        return CurrentHealth;
     }
 
     private void OnTriggerEnter2D(Collider2D Collision)

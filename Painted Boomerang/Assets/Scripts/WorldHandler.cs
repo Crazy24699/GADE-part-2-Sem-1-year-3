@@ -2,6 +2,7 @@ using JetBrains.Annotations;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
+using TMPro;
 using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.SocialPlatforms.Impl;
@@ -36,6 +37,8 @@ public class WorldHandler : MonoBehaviour
     public PlayerFunctionality Team1Script;
     public PlayerFunctionality Team2Script;
 
+    public TextMeshProUGUI AnnoucementText;
+
     public enum Teams
     {
         Team1,
@@ -60,7 +63,9 @@ public class WorldHandler : MonoBehaviour
 
         PopulateScript = GameObject.FindObjectOfType<PopulateGrid>();
         StartCoroutine(GenerateGrid());
+
         CurrentTeam = Teams.Team1;
+
 
     }
 
@@ -130,7 +135,24 @@ public class WorldHandler : MonoBehaviour
         yield return new WaitForSeconds(0.5f);
         StartCoroutine(PopulateNearCells());
         Debug.Log(AllCells.Count);
+        SetActivePlayer(CurrentTeam);
     }
+
+    public void EndGame(Teams LostTeam)
+    {
+        switch (LostTeam)
+        {
+            case Teams.Team1:
+                AnnoucementText.text = $"{Teams.Team2} Has won";
+                break;
+
+            case Teams.Team2:
+                AnnoucementText.text = $"{Teams.Team1} Has won";
+                break;
+        }
+        Time.timeScale = 0;
+    }
+
 
     private IEnumerator PopulateNearCells()
     {
@@ -186,12 +208,16 @@ public class WorldHandler : MonoBehaviour
                 ObjectRef.GetComponent<SpriteRenderer>().color = Color.green;
                 SpawnedPiece.transform.SetParent(Team1Script.transform);
                 Team1Script.Entities.Add(SpawnedPiece.GetComponent<EntityBase>());
+                SpawnedPiece.GetComponent<EntityBase>().PlayerScript = Team1Script;
+                Team1Script.CanPerformAction = true;
                 break;
 
             case Teams.Team2:
                 ObjectRef.GetComponent<SpriteRenderer>().color = Color.red;
                 SpawnedPiece.transform.SetParent(Team2Script.transform);
                 Team2Script.Entities.Add(SpawnedPiece.GetComponent<EntityBase>());
+                SpawnedPiece.GetComponent<EntityBase>().PlayerScript = Team2Script;
+                Team2Script.CanPerformAction = true;
                 break;
 
         }
@@ -201,16 +227,19 @@ public class WorldHandler : MonoBehaviour
 
     public void SetActivePlayer(Teams ActiveTeam)
     {
+        Debug.Log(ActiveTeam);
         switch (ActiveTeam)
         {
             case Teams.Team2:
                 Team1Script.TurnActive = true;
+                Team1Script.TurnStart();
                 Team2Script.TurnActive = false;
                 Team1Script.MovesRemaining = MaxMoves;
                 break;
 
             case Teams.Team1:
                 Team2Script.TurnActive = true;
+                Team2Script.TurnStart();
                 Team1Script.TurnActive = false;
                 Team2Script.MovesRemaining = MaxMoves;
                 break;
