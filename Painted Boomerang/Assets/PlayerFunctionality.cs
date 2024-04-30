@@ -126,11 +126,11 @@ public class PlayerFunctionality : MonoBehaviour
             switch (SelectedEntityBase.MouseDistance)
             {
                 case < 8:
-                    TrackedIcon.GetComponent<Image>().color = MoveIcon.color;
+                    TrackedIcon.GetComponent<Image>().sprite= MoveIcon.sprite;
                     break;
 
                 case >= 8:
-                    TrackedIcon.GetComponent<Image>().color = BoomerangIcon.color;
+                    TrackedIcon.GetComponent<Image>().sprite = BoomerangIcon.sprite;
                     break;
             }
 
