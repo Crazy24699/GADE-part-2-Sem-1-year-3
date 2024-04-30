@@ -85,7 +85,7 @@ public class CellFunctionality : MonoBehaviour
                 //Debug.Log(WorldScript.AllCells.Where(Cell => Cell.Location == Location).ToString());
                 //Debug.Log("Sharp and clean  ");
                 NeighbourCellsLocation.Add(CellCord);
-                Debug.Log(CellCord);
+                //Debug.Log(CellCord);
             }
             
         }

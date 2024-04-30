@@ -18,7 +18,7 @@ TagManager:
   - UI
   - Break Wall
   - Boundary Wall
-  - 
+  - Boomerang
   - Constructs
   - Pieces
   - Cell
@@ -51,4 +51,7 @@ TagManager:
     locked: 0
   - name: Cells
     uniqueID: 3647089941
+    locked: 0
+  - name: UI
+    uniqueID: 2669915531
     locked: 0
