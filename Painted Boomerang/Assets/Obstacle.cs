@@ -5,7 +5,7 @@ using UnityEngine.UI;
 
 public class Obstacle : MonoBehaviour
 {
-    const int MaxHealth = 3;
+    const int MaxHealth = 4;
     public int CurrentHealth;
     public Slider HealthSlider;
     public bool CanTakeDamage;
@@ -46,8 +46,10 @@ public class Obstacle : MonoBehaviour
             BoomerangFunctionality BoomerangScript = Collision.gameObject.GetComponent<BoomerangFunctionality>();
             if ( BoomerangScript.CanApplyDamage && CanTakeDamage) 
             {
+                
                 StartCoroutine(DamageCooldown());
                 StartCoroutine(BoomerangScript.DamageCooldown());
+                Debug.Log(BoomerangScript.Damage);
                 TakeDamage(BoomerangScript.Damage);
             }
 

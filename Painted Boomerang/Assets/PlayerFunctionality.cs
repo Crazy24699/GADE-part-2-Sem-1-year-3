@@ -21,6 +21,7 @@ public class PlayerFunctionality : MonoBehaviour
 
     public bool TurnActive;
     public bool CanPerformAction;
+    public bool InstantBreak;
 
     public WorldHandler.Teams ThisTeam;
     public WorldHandler WorldHandlerScript;
@@ -183,8 +184,15 @@ public class PlayerFunctionality : MonoBehaviour
         Vector2 MoveDirection = (RayHitRef.point - new Vector2(SelectedEntity.transform.position.x, SelectedEntity.transform.position.y)).normalized;
         GameObject SpawnedBoomerang= Instantiate(BoomerangObject, SelectedEntity.transform.position, SelectedEntity.transform.rotation);
         SpawnedBoomerang.GetComponent<Rigidbody2D>().velocity = MoveDirection*25;
-        SpawnedBoomerang.GetComponent<BoomerangFunctionality>().ParentEntity = SelectedEntity;
-        SpawnedBoomerang.GetComponent<BoomerangFunctionality>().ThisTeam = ThisTeam;
+        BoomerangFunctionality BoomerangeScriptRef=SpawnedBoomerang.GetComponent<BoomerangFunctionality>();
+        BoomerangeScriptRef.ParentEntity = SelectedEntity;
+        BoomerangeScriptRef.ThisTeam = ThisTeam;
+        BoomerangeScriptRef.PlayerParent = this;
+        if (InstantBreak)
+        {
+            BoomerangeScriptRef.InstantBreak = true;
+            BoomerangeScriptRef.Damage = 100;
+        }
 
         //SelectedEntity = null;
     }

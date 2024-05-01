@@ -9,6 +9,7 @@ TagManager:
   - Cell
   - Entity
   - Boomerang
+  - Powerup
   layers:
   - Default
   - TransparentFX
