@@ -12,6 +12,7 @@ public class BoomerangFunctionality : MonoBehaviour
     public int Damage;
 
     public bool CanApplyDamage = true;
+    public bool InstantBreak = false;   
 
     protected Vector2 LastVel;
     protected Vector2 Direction;
@@ -20,6 +21,7 @@ public class BoomerangFunctionality : MonoBehaviour
     protected Rigidbody2D RB2D;
 
     public WorldHandler.Teams ThisTeam;
+    public PlayerFunctionality PlayerParent;
 
     public GameObject ParentEntity;
     public GameObject CollidedObject;
@@ -37,6 +39,10 @@ public class BoomerangFunctionality : MonoBehaviour
         BouncesRemaining = MaxBounces;
         RB2D = GetComponent<Rigidbody2D>();
         CanApplyDamage = true;
+        if(InstantBreak && PlayerParent.InstantBreak)
+        {
+            Damage = 105;
+        }
     }
 
     // Update is called once per frame
@@ -64,10 +70,20 @@ public class BoomerangFunctionality : MonoBehaviour
             RB2D.velocity = Direction * Mathf.Max(CurrentSpeed, 0);
 
             BouncesRemaining--;
-            if ( Collision.collider.tag.Contains("Break")) 
+            if ( Collision.collider.tag.Contains("Break") ) 
             {
                 //StartCoroutine(DamageCooldown());
                 CollidedObject = Collision.gameObject;
+                if (PlayerParent.InstantBreak && InstantBreak)
+                {
+                    Damage = 105;
+                    BouncesRemaining = 0;
+                }
+                if (!PlayerParent.InstantBreak && Damage > 3 && !InstantBreak) 
+                {
+                    PlayerParent.InstantBreak = false;
+                    Damage = 3;
+                }
             }
 
         }
