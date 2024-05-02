@@ -72,6 +72,7 @@ public class PlayerFunctionality : MonoBehaviour
             foreach (EntityBase Entity in Entities)
             {
                 Entity.gameObject.GetComponent<Collider2D>().excludeLayers = new LayerMask();
+                SelectedEntity = null;
             }
             WorldHandlerScript.SetActivePlayer(ThisTeam);
 
@@ -192,10 +193,11 @@ public class PlayerFunctionality : MonoBehaviour
         BoomerangeScriptRef.PlayerParent = this;
         if (InstantBreak)
         {
-            BoomerangeScriptRef.InstantBreak = true;
             BoomerangeScriptRef.Damage = 100;
+            BoomerangeScriptRef.InstantBreak = true;
         }
         SelectedEntity.GetComponent<SpriteRenderer>().color = Color.white;
+        SelectedEntity = null;
 
         //SelectedEntity = null;
     }
