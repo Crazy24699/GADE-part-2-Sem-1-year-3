@@ -27,6 +27,10 @@ public class UIFunctionality : MonoBehaviour
 
     public void PauseGame()
     {
+        if(Time.timeScale <= 0f)
+        {
+            GamePaused = true;
+        }
         switch (GamePaused)
         {
             default:
@@ -44,6 +48,12 @@ public class UIFunctionality : MonoBehaviour
         PauseUI.SetActive(GamePaused);
 
 
+    }
+
+    public void RestartGame()
+    {
+        PauseGame();
+        SceneManager.LoadScene("Main Level");
     }
 
     public void MoveToMainMenu()

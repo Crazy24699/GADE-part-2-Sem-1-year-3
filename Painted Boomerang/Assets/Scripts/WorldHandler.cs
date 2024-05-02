@@ -30,6 +30,7 @@ public class WorldHandler : MonoBehaviour
     [Space(5)]
     public GameObject PlayPieceRef;
     public GameObject ActivatedCell;
+    [SerializeField]protected GameObject EndGamePanel;
     
     [Space(10)]
     public HashSet<CellFunctionality> AllCells = new HashSet<CellFunctionality>();
@@ -39,7 +40,8 @@ public class WorldHandler : MonoBehaviour
     public PlayerFunctionality Team1Script;
     public PlayerFunctionality Team2Script;
 
-    public TextMeshProUGUI AnnoucementText;
+    [SerializeField] protected TextMeshProUGUI AnnoucementText;
+    [SerializeField] protected TextMeshProUGUI EndGameText;
 
     public enum Teams
     {
@@ -144,14 +146,15 @@ public class WorldHandler : MonoBehaviour
 
     public void EndGame(Teams LostTeam)
     {
+        EndGamePanel.SetActive(true) ;
         switch (LostTeam)
         {
             case Teams.Team1:
-                AnnoucementText.text = $"{Teams.Team2} Has won";
+                EndGameText.text = $"{Teams.Team2} Has won";
                 break;
 
             case Teams.Team2:
-                AnnoucementText.text = $"{Teams.Team1} Has won";
+                EndGameText.text = $"{Teams.Team1} Has won";
                 break;
         }
         Time.timeScale = 0;

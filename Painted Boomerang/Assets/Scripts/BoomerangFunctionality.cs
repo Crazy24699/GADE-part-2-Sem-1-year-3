@@ -79,7 +79,7 @@ public class BoomerangFunctionality : MonoBehaviour
                     Damage = 105;
                     BouncesRemaining = 0;
                 }
-                if (!PlayerParent.InstantBreak && Damage > 3 && !InstantBreak) 
+                if (PlayerParent.InstantBreak && Damage > 3 && !InstantBreak) 
                 {
                     PlayerParent.InstantBreak = false;
                     Damage = 3;
@@ -105,6 +105,10 @@ public class BoomerangFunctionality : MonoBehaviour
             {
                 ParentEntity.GetComponent<EntityBase>().PlayerScript.CanPerformAction = true;
                 ParentEntity.GetComponent<EntityBase>().PlayerScript.MovesRemaining--;
+                if(InstantBreak)
+                {
+                    ParentEntity.GetComponent<EntityBase>().PlayerScript.InstantBreak = false;
+                }
                 Destroy(this.gameObject);
             }
         }
