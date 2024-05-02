@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 public class UIFunctionality : MonoBehaviour
 {
@@ -13,14 +14,41 @@ public class UIFunctionality : MonoBehaviour
     public GameObject GameUI;
     public GameObject PauseUI;
 
-    void Start()
+    public bool GamePaused;
+
+
+    private void Update()
     {
-        
+        if (Input.GetKeyDown(KeyCode.Escape))
+        {
+            PauseGame();
+        }
     }
 
-    // Update is called once per frame
-    void Update()
+    public void PauseGame()
     {
-        
+        switch (GamePaused)
+        {
+            default:
+            case true:
+                GamePaused = false;
+                Time.timeScale = 1;
+                break;
+
+            case false:
+                GamePaused = true;
+                Time.timeScale = 0;
+                break;
+        }
+
+        PauseUI.SetActive(GamePaused);
+
+
     }
+
+    public void MoveToMainMenu()
+    {
+        SceneManager.LoadScene("Main Menu");
+    }
+
 }
