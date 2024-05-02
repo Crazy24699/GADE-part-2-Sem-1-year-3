@@ -24,10 +24,12 @@ public class WorldHandler : MonoBehaviour
     [Space(10)]
     public GameObject TilePrefab;
     public GameObject LoadingScreenPanel;
+    public GameObject[] ObstacleGridChoices;
+    public GameObject ChosenObstacleGrid;
 
     [Space(5)]
     public GameObject PlayPieceRef;
-
+    public GameObject ActivatedCell;
     
     [Space(10)]
     public HashSet<CellFunctionality> AllCells = new HashSet<CellFunctionality>();
@@ -66,7 +68,8 @@ public class WorldHandler : MonoBehaviour
 
         CurrentTeam = Teams.Team1;
 
-
+        int RandomGrid = Random.Range(0, ObstacleGridChoices.Length);
+        ChosenObstacleGrid = ObstacleGridChoices[RandomGrid];
     }
 
     #region Grid Generation
@@ -134,6 +137,7 @@ public class WorldHandler : MonoBehaviour
         }
         yield return new WaitForSeconds(0.5f);
         StartCoroutine(PopulateNearCells());
+        Instantiate(ChosenObstacleGrid, Vector3.zero, Quaternion.Euler(Vector3.zero));
         Debug.Log(AllCells.Count);
         SetActivePlayer(CurrentTeam);
     }
@@ -162,6 +166,8 @@ public class WorldHandler : MonoBehaviour
             CellScript.PopulateNearCellList(AreaHeight, AreaLength);
         }
         //PopulateScript.PickWallSpots();
+        yield return new WaitForSeconds(0.5f);
+        
     }
 
     /*Make the individual entities spawn into their respective team numbers, make the team numbers as parents within the world

@@ -13,6 +13,7 @@ public class PlayerFunctionality : MonoBehaviour
 
     public int MovesRemaining = 0;
     public Vector2Int CellCursorLocation;
+    public Vector2 ActiveCellLocation;
 
     public LayerMask ExclusionLayers;
     public LayerMask SelectableLayers;
@@ -35,11 +36,12 @@ public class PlayerFunctionality : MonoBehaviour
     void Start()
     {
         WorldHandlerScript = GameObject.FindObjectOfType<WorldHandler>();
-
+        TurnsText.text = "";
     }
 
     public void TurnStart()
     {
+        WorldHandlerScript.ActivatedCell.transform.position = ActiveCellLocation;
         Debug.Log("Went");
         foreach (EntityBase Entity in Entities)
         {
@@ -54,7 +56,7 @@ public class PlayerFunctionality : MonoBehaviour
         {
             return;
         }
-        TurnsText.text = $"Team {ThisTeam} Turn and have {MovesRemaining}";
+        TurnsText.text = $"It is {ThisTeam}'s turn and have {MovesRemaining} moves remaining";
         MouseFunctionalty();
         if (MovesRemaining <= 0)
         {
@@ -193,6 +195,7 @@ public class PlayerFunctionality : MonoBehaviour
             BoomerangeScriptRef.InstantBreak = true;
             BoomerangeScriptRef.Damage = 100;
         }
+        SelectedEntity.GetComponent<SpriteRenderer>().color = Color.white;
 
         //SelectedEntity = null;
     }

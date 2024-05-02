@@ -119,7 +119,7 @@ public class BoomerangFunctionality : MonoBehaviour
     public IEnumerator DamageCooldown()
     {
         CanApplyDamage = false;
-        yield return new WaitForSeconds(0.25f);
+        yield return new WaitForSeconds(0.15f);
         CollidedObject = null;
         CanApplyDamage = true;
     }
