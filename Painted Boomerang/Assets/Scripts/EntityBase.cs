@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using Unity.VisualScripting;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class EntityBase : MonoBehaviour
 {
@@ -16,6 +17,9 @@ public class EntityBase : MonoBehaviour
 
     public Vector2Int CurrentPosition;
 
+    public Slider HealthBar;
+
+    public Color SpriteColor;
 
     public int MouseDistance;
 
@@ -26,6 +30,9 @@ public class EntityBase : MonoBehaviour
     void Start()
     {
         CurrentHealth = MaxHealth;
+        HealthBar.minValue = 0;
+        HealthBar.maxValue = MaxHealth;
+        HealthBar.value = CurrentHealth;
     }
 
     // Update is called once per frame
@@ -34,6 +41,7 @@ public class EntityBase : MonoBehaviour
         Vector2 MousePosition = Camera.main.ScreenToWorldPoint(Input.mousePosition);
         //MouseDistance = new Vector2Int(Mathf.RoundToInt(Mathf.Abs(MousePosition.x - transform.position.x)), Mathf.RoundToInt(Mathf.Abs(MousePosition.y - transform.position.y)));
         MouseDistance = Mathf.RoundToInt(Mathf.Abs(Vector2.Distance(this.transform.position, MousePosition)));
+        HealthBar.value = CurrentHealth ;
     }
 
     public void MoveEntity(Vector2Int CellCord)
@@ -52,6 +60,11 @@ public class EntityBase : MonoBehaviour
             Destroy(this.gameObject);
         }
         return CurrentHealth;
+    }
+
+    public void RevertColour()
+    {
+        this.GetComponent<SpriteRenderer>().color = SpriteColor;
     }
 
     private void OnTriggerEnter2D(Collider2D Collision)

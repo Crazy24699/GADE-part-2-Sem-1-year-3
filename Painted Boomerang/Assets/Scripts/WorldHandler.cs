@@ -218,6 +218,8 @@ public class WorldHandler : MonoBehaviour
                 SpawnedPiece.transform.SetParent(Team1Script.transform);
                 Team1Script.Entities.Add(SpawnedPiece.GetComponent<EntityBase>());
                 SpawnedPiece.GetComponent<EntityBase>().PlayerScript = Team1Script;
+                SpawnedPiece.GetComponent<EntityBase>().SpriteColor = Color.green;
+                SpawnedPiece.GetComponent<EntityBase>().RevertColour();
                 Team1Script.CanPerformAction = true;
                 break;
 
@@ -226,6 +228,8 @@ public class WorldHandler : MonoBehaviour
                 SpawnedPiece.transform.SetParent(Team2Script.transform);
                 Team2Script.Entities.Add(SpawnedPiece.GetComponent<EntityBase>());
                 SpawnedPiece.GetComponent<EntityBase>().PlayerScript = Team2Script;
+                SpawnedPiece.GetComponent<EntityBase>().SpriteColor = Color.red;
+                SpawnedPiece.GetComponent<EntityBase>().RevertColour();
                 Team2Script.CanPerformAction = true;
                 break;
 
