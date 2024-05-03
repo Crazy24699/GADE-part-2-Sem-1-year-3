@@ -50,6 +50,12 @@ public class UIFunctionality : MonoBehaviour
 
     }
 
+    public void Resume()
+    {
+        PauseGame();
+        PauseUI.SetActive(false);
+    }
+
     public void RestartGame()
     {
         PauseGame();
