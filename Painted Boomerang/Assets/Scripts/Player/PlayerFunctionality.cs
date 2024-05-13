@@ -7,27 +7,36 @@ using UnityEngine.UI;
 
 public class PlayerFunctionality : MonoBehaviour
 {
+    [Space(15), Header("Game Objects")]
     public GameObject SelectedEntity;
     public GameObject BoomerangObject;
 
 
+    [Space(15), Header("Ints")]
     public int MovesRemaining = 0;
-    public Vector2Int CellCursorLocation;
-    public Vector2 ActiveCellLocation;
 
+
+    protected Vector2Int CellCursorLocation;
+    protected Vector2 ActiveCellLocation;
+
+    [Space(15), Header("Layers")]
     public LayerMask ExclusionLayers;
     public LayerMask SelectableLayers;
 
-    public List<EntityBase> Entities;
+    [HideInInspector] public List<EntityBase> Entities;
 
-    public bool TurnActive;
-    public bool CanPerformAction;
-    public bool InstantBreak;
+    [Space(15), Header("Bools")]
+    [HideInInspector] public bool TurnActive;
+    [HideInInspector] public bool CanPerformAction;
+    [HideInInspector] public bool InstantBreak;
+    protected bool PlayerControlled = true;
 
-    public WorldHandler.Teams ThisTeam;
+    [Space(15), Header("Scripts")]
+    protected WorldHandler.Teams ThisTeam;
     public WorldHandler WorldHandlerScript;
     public TextMeshProUGUI TurnsText;
 
+    [Space(15), Header("Images and UI")]
     public Image BoomerangIcon;
     public Image MoveIcon;
     public RectTransform TrackedIcon;
@@ -57,11 +66,18 @@ public class PlayerFunctionality : MonoBehaviour
             return;
         }
         TurnsText.text = $"It is {ThisTeam}'s turn and have {MovesRemaining} moves remaining";
-        MouseFunctionalty();
+
         if (MovesRemaining <= 0)
         {
             EndTurn();
         }
+
+        if (PlayerControlled)
+        {
+            MouseInteraction();
+            return;
+        }
+        
     }
 
     public void EndTurn()
@@ -87,7 +103,7 @@ public class PlayerFunctionality : MonoBehaviour
         }
     }
 
-    public void MouseFunctionalty()
+    public void MouseInteraction()
     {
 
         if (Input.GetMouseButtonDown(1))

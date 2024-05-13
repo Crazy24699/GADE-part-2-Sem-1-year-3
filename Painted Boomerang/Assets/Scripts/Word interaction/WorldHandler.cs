@@ -32,8 +32,11 @@ public class WorldHandler : MonoBehaviour
     public GameObject ActivatedCell;
     [SerializeField]protected GameObject EndGamePanel;
     
+    //Hashsets
     [Space(10)]
     public HashSet<CellFunctionality> AllCells = new HashSet<CellFunctionality>();
+    public HashSet<EntityBase> Player1Entities = new HashSet<EntityBase>();
+    public HashSet<EntityBase> Player2Entities = new HashSet<EntityBase>();
 
     public GameManager GameManagerScript;
     public PopulateGrid PopulateScript;
@@ -216,10 +219,10 @@ public class WorldHandler : MonoBehaviour
             case Teams.Team1:
                 ObjectRef.GetComponent<SpriteRenderer>().color = Color.green;
                 SpawnedPiece.transform.SetParent(Team1Script.transform);
-                Team1Script.Entities.Add(SpawnedPiece.GetComponent<EntityBase>());
                 SpawnedPiece.GetComponent<EntityBase>().PlayerScript = Team1Script;
                 SpawnedPiece.GetComponent<EntityBase>().SpriteColor = Color.green;
                 SpawnedPiece.GetComponent<EntityBase>().RevertColour();
+                Player1Entities.Add(SpawnedPiece.GetComponent<EntityBase>());
                 Team1Script.CanPerformAction = true;
                 break;
 
@@ -230,6 +233,7 @@ public class WorldHandler : MonoBehaviour
                 SpawnedPiece.GetComponent<EntityBase>().PlayerScript = Team2Script;
                 SpawnedPiece.GetComponent<EntityBase>().SpriteColor = Color.red;
                 SpawnedPiece.GetComponent<EntityBase>().RevertColour();
+                Player2Entities.Add(SpawnedPiece.GetComponent<EntityBase>());
                 Team2Script.CanPerformAction = true;
                 break;
 
