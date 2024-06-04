@@ -10,6 +10,7 @@ EditorBuildSettings:
     guid: 4aa51b5ce4d25b946a31f260c9387f7d
   - enabled: 1
 <<<<<<< HEAD
+<<<<<<< HEAD
     path: Assets/Scenes/PlayerVPlayer.unity
     guid: 2cda990e2423bbf4892e6590ba056729
   - enabled: 1
@@ -22,4 +23,8 @@ EditorBuildSettings:
     path: Assets/Scenes/PVC.unity
     guid: 93c3b1951f7495a4a91aadc40dc7249e
 >>>>>>> Changes-branch-1
+=======
+    path: Assets/Scenes/Main Level.unity
+    guid: 2cda990e2423bbf4892e6590ba056729
+>>>>>>> parent of 9342e79 (Started with the AI portion of the game)
   m_configObjects: {}

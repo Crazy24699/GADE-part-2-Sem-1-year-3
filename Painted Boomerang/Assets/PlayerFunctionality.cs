@@ -7,24 +7,20 @@ using UnityEngine.UI;
 
 public class PlayerFunctionality : MonoBehaviour
 {
-    [Space(15), Header("Game Objects")]
     public GameObject SelectedEntity;
     public GameObject BoomerangObject;
 
 
-    [Space(15), Header("Ints")]
     public int MovesRemaining = 0;
+    public Vector2Int CellCursorLocation;
+    public Vector2 ActiveCellLocation;
 
-
-    protected Vector2Int CellCursorLocation;
-    protected Vector2 ActiveCellLocation;
-
-    [Space(15), Header("Layers")]
     public LayerMask ExclusionLayers;
     public LayerMask SelectableLayers;
 
-    [HideInInspector] public List<EntityBase> Entities;
+    public List<EntityBase> Entities;
 
+<<<<<<< HEAD:Painted Boomerang/Assets/Scripts/Player/PlayerFunctionality.cs
 <<<<<<<< HEAD:Painted Boomerang/Assets/Scripts/Player/PlayerFunctionality.cs
     [Space(15), Header("Bools")]
     [HideInInspector] public bool TurnActive;
@@ -37,13 +33,16 @@ public class PlayerFunctionality : MonoBehaviour
     public bool InstantBreak;
     public bool AIControlled;
 >>>>>>>> Changes-branch-1:Painted Boomerang/Assets/Scripts/PlayerFunctionality.cs
+=======
+    public bool TurnActive;
+    public bool CanPerformAction;
+    public bool InstantBreak;
+>>>>>>> parent of 9342e79 (Started with the AI portion of the game):Painted Boomerang/Assets/PlayerFunctionality.cs
 
-    [Space(15), Header("Scripts")]
-    protected WorldHandler.Teams ThisTeam;
+    public WorldHandler.Teams ThisTeam;
     public WorldHandler WorldHandlerScript;
     public TextMeshProUGUI TurnsText;
 
-    [Space(15), Header("Images and UI")]
     public Image BoomerangIcon;
     public Image MoveIcon;
     public RectTransform TrackedIcon;
@@ -73,6 +72,7 @@ public class PlayerFunctionality : MonoBehaviour
             return;
         }
         TurnsText.text = $"It is {ThisTeam}'s turn and have {MovesRemaining} moves remaining";
+<<<<<<< HEAD:Painted Boomerang/Assets/Scripts/Player/PlayerFunctionality.cs
 
 <<<<<<<< HEAD:Painted Boomerang/Assets/Scripts/Player/PlayerFunctionality.cs
 ========
@@ -83,17 +83,13 @@ public class PlayerFunctionality : MonoBehaviour
         }
 
 >>>>>>>> Changes-branch-1:Painted Boomerang/Assets/Scripts/PlayerFunctionality.cs
+=======
+        MouseFunctionalty();
+>>>>>>> parent of 9342e79 (Started with the AI portion of the game):Painted Boomerang/Assets/PlayerFunctionality.cs
         if (MovesRemaining <= 0)
         {
             EndTurn();
         }
-
-        if (PlayerControlled)
-        {
-            MouseInteraction();
-            return;
-        }
-        
     }
 
     public void EndTurn()
@@ -119,7 +115,7 @@ public class PlayerFunctionality : MonoBehaviour
         }
     }
 
-    public void MouseInteraction()
+    public void MouseFunctionalty()
     {
 
         if (Input.GetMouseButtonDown(1))
