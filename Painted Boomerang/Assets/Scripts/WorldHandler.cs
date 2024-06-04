@@ -1,11 +1,10 @@
-using JetBrains.Annotations;
+
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using TMPro;
-using Unity.VisualScripting;
 using UnityEngine;
-using UnityEngine.SocialPlatforms.Impl;
+
 
 public class WorldHandler : MonoBehaviour
 {
@@ -30,8 +29,8 @@ public class WorldHandler : MonoBehaviour
     [Space(5)]
     public GameObject PlayPieceRef;
     public GameObject ActivatedCell;
-    [SerializeField]protected GameObject EndGamePanel;
-    
+    [SerializeField] protected GameObject EndGamePanel;
+
     [Space(10)]
     public HashSet<CellFunctionality> AllCells = new HashSet<CellFunctionality>();
 
@@ -43,11 +42,6 @@ public class WorldHandler : MonoBehaviour
     [SerializeField] protected TextMeshProUGUI AnnoucementText;
     [SerializeField] protected TextMeshProUGUI EndGameText;
 
-    public enum Teams
-    {
-        Team1,
-        Team2
-    }
     public Teams CurrentTeam;
 
     // Start is called before the first frame update
@@ -68,6 +62,24 @@ public class WorldHandler : MonoBehaviour
 
         int RandomGrid = Random.Range(0, ObstacleGridChoices.Length);
         ChosenObstacleGrid = ObstacleGridChoices[RandomGrid];
+
+        if (Team1Script == null)
+        {
+            Team1Script = GameObject.Find("Team 1").GetComponent<PlayerFunctionality>();
+        }
+        if(Team2Script == null)
+        {
+            Team2Script = GameObject.Find("Team 2").GetComponent<PlayerFunctionality>();
+        }
+
+    }
+
+    public void StartupScripts()
+    {
+        Team1Script.Startup();
+        Team2Script.Startup();
+
+        SetActivePlayer(CurrentTeam);
     }
 
     #region Grid Generation
@@ -137,7 +149,7 @@ public class WorldHandler : MonoBehaviour
         StartCoroutine(PopulateNearCells());
         Instantiate(ChosenObstacleGrid, Vector3.zero, Quaternion.Euler(Vector3.zero));
         Debug.Log(AllCells.Count);
-        SetActivePlayer(CurrentTeam);
+        
     }
 
     public void EndGame(Teams LostTeam)
@@ -206,16 +218,18 @@ public class WorldHandler : MonoBehaviour
 
 
         ObjectRef.GetComponent<CellFunctionality>().StartingCell = true;
-        SpawnedPiece.GetComponent<EntityBase>().AssignedTeam = ThisTeam;
+        EntityBase SpawnedEntity = SpawnedPiece.GetComponent<EntityBase>();
+        SpawnedEntity.AssignedTeam = ThisTeam;
+
+
+        SpawnedPiece.name = "PlayPiece " + ThisTeam;
         switch (ThisTeam)
         {
             case Teams.Team1:
                 ObjectRef.GetComponent<SpriteRenderer>().color = Color.green;
                 SpawnedPiece.transform.SetParent(Team1Script.transform);
                 Team1Script.Entities.Add(SpawnedPiece.GetComponent<EntityBase>());
-                SpawnedPiece.GetComponent<EntityBase>().PlayerScript = Team1Script;
-                SpawnedPiece.GetComponent<EntityBase>().SpriteColor = Color.green;
-                SpawnedPiece.GetComponent<EntityBase>().RevertColour();
+                SpawnedEntity.SetEntityInfo(Team1Script, Color.green, Teams.Team1);
                 Team1Script.CanPerformAction = true;
                 break;
 
@@ -223,9 +237,7 @@ public class WorldHandler : MonoBehaviour
                 ObjectRef.GetComponent<SpriteRenderer>().color = Color.red;
                 SpawnedPiece.transform.SetParent(Team2Script.transform);
                 Team2Script.Entities.Add(SpawnedPiece.GetComponent<EntityBase>());
-                SpawnedPiece.GetComponent<EntityBase>().PlayerScript = Team2Script;
-                SpawnedPiece.GetComponent<EntityBase>().SpriteColor = Color.red;
-                SpawnedPiece.GetComponent<EntityBase>().RevertColour();
+                SpawnedEntity.SetEntityInfo(Team2Script, Color.red, Teams.Team2);
                 Team2Script.CanPerformAction = true;
                 break;
 
@@ -258,4 +270,9 @@ public class WorldHandler : MonoBehaviour
     }
     
     
+}
+public enum Teams
+{
+    Team1,
+    Team2
 }

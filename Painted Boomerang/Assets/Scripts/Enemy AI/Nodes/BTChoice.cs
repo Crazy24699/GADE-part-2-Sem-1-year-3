@@ -35,16 +35,17 @@ public class BTChoice : BTNodeBase
     public override NodeStateOptions RunNodeLogicAndStatus()
     {
 
-        if(Input.GetKeyDown(KeyCode.T))
+        if(Input.GetKey(KeyCode.T))
         {
             EnemyAIScript.PieceSelected = true;
             Retreating = true;
+
         }
 
         if(EnemyAIScript.PieceSelected)
         {
             ChosenPieceRef = EnemyAIScript.ChosenPiece;
-            Debug.Log("Negative");
+            
             ChooseAction();
 
             return NodeStateOptions.Pass;
@@ -55,12 +56,16 @@ public class BTChoice : BTNodeBase
 
     protected void ChooseAction()
     {
-        if((EnemyAIScript.LowHealthPiece && Retreating) || Retreating)
+        if((EnemyAIScript.LowHealthPiece) || Retreating)
         {
+            
             TakeCover();
-            return;
         }
-        
+        if(!Retreating)
+        {
+            Debug.Log("Ive unlocked it ");
+            EnemyAIScript.ChosenPiece.CheckMainCardinalDirections();
+        }
         
     }
 
@@ -68,8 +73,10 @@ public class BTChoice : BTNodeBase
     {
         RaycastHit2D[] CirclesData = Physics2D.CircleCastAll(ChosenPieceRef.transform.position, 1.25f, Vector2.down, EnemyAIScript.InteractableLayers);
         float NewCoverDistance;
+        Debug.Log("Negative");
         foreach (var IntersectPoint in CirclesData)
         {
+
             NewCoverDistance = Vector2.Distance(IntersectPoint.transform.position, ChosenPieceRef.transform.position);
             if (NewCoverDistance < CoverDistance) 
             {
@@ -94,10 +101,10 @@ public class BTChoice : BTNodeBase
 
 
     }
-    void OnDrawGizmos()
+    public void OnDrawGizmos()
     {
-        
+        Debug.Log("Negative");
         Gizmos.color = Color.red;
-        Gizmos.DrawWireSphere(ChosenPieceRef.transform.position, 1.25f);
+        Gizmos.DrawWireSphere(Vector2.up, 1.25f);
     }
 }

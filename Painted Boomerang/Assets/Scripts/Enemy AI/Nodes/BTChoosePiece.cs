@@ -9,6 +9,7 @@ public class BTChoosePiece : BTNodeBase
     public WorldHandler WorldHandlerScript;
     public NavMeshAgent AgentRef;
 
+    //GameObj
     public GameObject Target;
     public GameObject SelfRef;
 
@@ -29,22 +30,34 @@ public class BTChoosePiece : BTNodeBase
 
     public override NodeStateOptions RunNodeLogicAndStatus()
     {
-        switch (EnemyAIScript.GameStarted)
+        if(PieceSelected == null)
         {
-            case true:
-                SelectPiece();
-                break;
+            switch (EnemyAIScript.GameStarted)
+            {
+                case true:
+                    SelectPiece();
+                    Debug.Log("woop");
+                    break;
 
-            case false:
-                int RandomPiece = Random.Range(0, EnemyAIScript.PiecesInPlay.Count);
-                PieceSelected = EnemyAIScript.PiecesInPlay[RandomPiece].GetComponent<EntityBase>();
-                break;
+                case false:
+                    int RandomPiece = Random.Range(0, EnemyAIScript.PiecesInPlay.Count);
+                    PieceSelected = EnemyAIScript.PiecesInPlay[RandomPiece].GetComponent<EntityBase>();
+                    PieceSelected.gameObject.GetComponent<SpriteRenderer>().color = Color.cyan;
+                    EnemyAIScript.ChosenPiece = PieceSelected;
+                    EnemyAIScript.PieceSelected = true;
+                    Debug.Log("Noop");
+                    break;
 
 
+            }
+            return NodeStateOptions.Pass;
         }
+        
         
         return NodeStateOptions.Fail;
     }
+
+    
 
     public void SelectPiece()
     {

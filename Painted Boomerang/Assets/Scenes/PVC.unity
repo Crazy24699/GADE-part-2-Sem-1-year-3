@@ -860,6 +860,7 @@ GameObject:
   - component: {fileID: 355600632}
   - component: {fileID: 355600633}
   - component: {fileID: 355600634}
+  - component: {fileID: 355600635}
   m_Layer: 0
   m_Name: Team 2
   m_TagString: Untagged
@@ -895,16 +896,19 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   PiecesInPlay: []
-  ChosenPiece: {fileID: 0}
   BoomerangRef: {fileID: 0}
   BehaviourTreeScript: {fileID: 0}
   AssignedTeam: 0
   InteractableLayers:
     serializedVersion: 2
-    m_Bits: 0
+    m_Bits: 1728
+  ChosenPiece: {fileID: 0}
+  ThisPlayerScript: {fileID: 0}
   EnemyInRange: 0
   CanThrow: 1
+  GameStarted: 0
   PieceSelected: 0
+  LowHealthPiece: 0
 --- !u!114 &355600634
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -917,28 +921,45 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8a537d152068b154b9ac2d5507f3ff94, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  SelectedEntity: {fileID: 0}
   BoomerangObject: {fileID: 0}
   MovesRemaining: 0
   CellCursorLocation: {x: 0, y: 0}
-  ActiveCellLocation: {x: 0, y: 0}
+  ActiveCellLocation: {x: 24, y: 0}
   ExclusionLayers:
     serializedVersion: 2
     m_Bits: 0
   SelectableLayers:
     serializedVersion: 2
     m_Bits: 0
-  Entities: []
   TurnActive: 0
   CanPerformAction: 0
   InstantBreak: 0
-  AIControlled: 0
-  ThisTeam: 0
+  AIControlled: 1
+  StartupRan: 0
+  Entities: []
+  ThisTeam: 1
   WorldHandlerScript: {fileID: 0}
-  TurnsText: {fileID: 0}
   BoomerangIcon: {fileID: 0}
   MoveIcon: {fileID: 0}
   TrackedIcon: {fileID: 0}
+  TurnsText: {fileID: 395370459}
+--- !u!114 &355600635
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 355600631}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f7ef598c369e0b54c9b537dedf362c4c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  RootNode:
+    CurrentNodeState: 0
+  AllChoiceOptions: []
+  EnemySelfRef: {fileID: 0}
+  StartupRan: 0
 --- !u!1 &360711062
 GameObject:
   m_ObjectHideFlags: 0
@@ -1380,7 +1401,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 359466f784b290747b26f46c8a058d41, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  CanMakeMove: 0
   TilePrefab: {fileID: 4033228640488970289, guid: 85b882614614dde429e6bd396c5334ef, type: 3}
   LoadingScreenPanel: {fileID: 1528479268}
   ObstacleGridChoices:
@@ -1394,7 +1414,7 @@ MonoBehaviour:
   ProgramManagerScript: {fileID: 0}
   PopulateScript: {fileID: 0}
   Team1Script: {fileID: 1650979151}
-  Team2Script: {fileID: 0}
+  Team2Script: {fileID: 355600634}
   AnnoucementText: {fileID: 395370459}
   EndGameText: {fileID: 2069279972}
   CurrentTeam: 0
@@ -1898,7 +1918,6 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 864319816}
-  - component: {fileID: 864319815}
   m_Layer: 0
   m_Name: Game Manager
   m_TagString: Untagged
@@ -1906,18 +1925,6 @@ GameObject:
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
---- !u!114 &864319815
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 864319814}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: f26c7bb624474c94689cf2eb4258c708, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!4 &864319816
 Transform:
   m_ObjectHideFlags: 0
@@ -2266,7 +2273,7 @@ GameObject:
   - component: {fileID: 1194232310}
   - component: {fileID: 1194232312}
   - component: {fileID: 1194232311}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: Bounding Wall (2)
   m_TagString: BoundaryWall
   m_Icon: {fileID: 0}
@@ -2558,7 +2565,7 @@ GameObject:
   - component: {fileID: 1363260193}
   - component: {fileID: 1363260192}
   - component: {fileID: 1363260194}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: Bounding Wall
   m_TagString: BoundaryWall
   m_Icon: {fileID: 0}
@@ -2765,7 +2772,7 @@ GameObject:
   - component: {fileID: 1600400926}
   - component: {fileID: 1600400928}
   - component: {fileID: 1600400927}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: Bounding Wall (1)
   m_TagString: BoundaryWall
   m_Icon: {fileID: 0}
@@ -3012,7 +3019,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8a537d152068b154b9ac2d5507f3ff94, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  SelectedEntity: {fileID: 0}
   BoomerangObject: {fileID: 6648229833626570824, guid: e9b1c06cadb25cb4a8beeb3a5dc76a5b, type: 3}
   MovesRemaining: 2
   CellCursorLocation: {x: 0, y: 0}
@@ -3023,17 +3029,18 @@ MonoBehaviour:
   SelectableLayers:
     serializedVersion: 2
     m_Bits: 3584
-  Entities: []
   TurnActive: 0
   CanPerformAction: 0
   InstantBreak: 0
   AIControlled: 0
+  StartupRan: 0
+  Entities: []
   ThisTeam: 0
   WorldHandlerScript: {fileID: 0}
-  TurnsText: {fileID: 395370459}
   BoomerangIcon: {fileID: 8937828928543727559, guid: 29e9541b061fdce4eb500cfddfa33601, type: 3}
   MoveIcon: {fileID: 1742779154123619856, guid: f4b55a436d3909a4380118cac9690c76, type: 3}
   TrackedIcon: {fileID: 675563574}
+  TurnsText: {fileID: 395370459}
 --- !u!1 &1782878055
 GameObject:
   m_ObjectHideFlags: 0
@@ -3243,7 +3250,7 @@ GameObject:
   - component: {fileID: 2055152623}
   - component: {fileID: 2055152625}
   - component: {fileID: 2055152624}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: Bounding Wall (3)
   m_TagString: BoundaryWall
   m_Icon: {fileID: 0}

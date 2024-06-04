@@ -14,6 +14,8 @@ public class BTAttackNode : BTNodeBase
     public float Distance;
     protected float MissChange = 3.5f;
 
+    protected bool CanAttack=false;
+
     public Vector3 Direciton;
 
     public List<GameObject> AllTargets = new List<GameObject>();
@@ -35,14 +37,14 @@ public class BTAttackNode : BTNodeBase
     public override NodeStateOptions RunNodeLogicAndStatus()
     {
 
-        if (Distance >= 2) 
+        if (Distance >= 2 && CanAttack) 
         {
             Debug.Log("evil roams");
             ThrowingLogic();
             return NodeStateOptions.Running;
         }
 
-        else if(EnemyAIScript.EnemyInRange) 
+        else if(EnemyAIScript.EnemyInRange && CanAttack) 
         {
             Debug.Log("Oh");
             switch (MissChange)         //Change this, its a placeholder
@@ -65,6 +67,7 @@ public class BTAttackNode : BTNodeBase
         }
         else
         {
+            Debug.Log("water dream");
             return NodeStateOptions.Fail;
         }
     }

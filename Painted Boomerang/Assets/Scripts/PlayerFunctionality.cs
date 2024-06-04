@@ -7,37 +7,55 @@ using UnityEngine.UI;
 
 public class PlayerFunctionality : MonoBehaviour
 {
-    public GameObject SelectedEntity;
+    [Space(5), Header(" ")]
+    protected GameObject SelectedEntity;
     public GameObject BoomerangObject;
 
-
+    [Space(5), Header(" ")]
     public int MovesRemaining = 0;
+
+    [Space(5), Header(" ")]
     public Vector2Int CellCursorLocation;
     public Vector2 ActiveCellLocation;
 
+    [Space(5), Header(" ")]
     public LayerMask ExclusionLayers;
     public LayerMask SelectableLayers;
 
-    public List<EntityBase> Entities;
 
+    [Space(5), Header(" ")]
     public bool TurnActive;
     public bool CanPerformAction;
     public bool InstantBreak;
     public bool AIControlled;
+    public bool StartupRan;
 
-    public WorldHandler.Teams ThisTeam;
+    [Space(5), Header(" ")]
+    public List<EntityBase> Entities;
+    public Teams ThisTeam;
     public WorldHandler WorldHandlerScript;
-    public TextMeshProUGUI TurnsText;
 
+    [Space(5), Header(" ")]
     public Image BoomerangIcon;
     public Image MoveIcon;
     public RectTransform TrackedIcon;
+    public TextMeshProUGUI TurnsText;
 
-    // Start is called before the first frame update
-    void Start()
+    public void Startup()
     {
         WorldHandlerScript = GameObject.FindObjectOfType<WorldHandler>();
         TurnsText.text = "";
+        if (AIControlled)
+        {
+            EnemyAI EnemyAIScript = GameObject.FindObjectOfType<EnemyAI>();
+            EnemyAIScript.AssignedTeam = ThisTeam;
+            EnemyAIScript.AIStartup();
+        }
+        foreach (var Piece in Entities)
+        {
+            Piece.Startup();
+        }
+        StartupRan = true;
     }
 
     public void TurnStart()
@@ -53,7 +71,7 @@ public class PlayerFunctionality : MonoBehaviour
 
     private void Update()
     {
-        if (!TurnActive)
+        if (!TurnActive || !StartupRan)
         {
             return;
         }
