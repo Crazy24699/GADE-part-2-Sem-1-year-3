@@ -214,6 +214,11 @@ public class WorldHandler : MonoBehaviour
                 SpawnedPiece.transform.SetParent(Team1Script.transform);
                 Team1Script.Entities.Add(SpawnedPiece.GetComponent<EntityBase>());
                 SpawnedPiece.GetComponent<EntityBase>().PlayerScript = Team1Script;
+<<<<<<< HEAD
+=======
+                SpawnedPiece.GetComponent<EntityBase>().SpriteColor = Color.green;
+                SpawnedPiece.GetComponent<EntityBase>().RevertColour();
+>>>>>>> parent of 9342e79 (Started with the AI portion of the game)
                 Team1Script.CanPerformAction = true;
                 break;
 
@@ -222,6 +227,11 @@ public class WorldHandler : MonoBehaviour
                 SpawnedPiece.transform.SetParent(Team2Script.transform);
                 Team2Script.Entities.Add(SpawnedPiece.GetComponent<EntityBase>());
                 SpawnedPiece.GetComponent<EntityBase>().PlayerScript = Team2Script;
+<<<<<<< HEAD
+=======
+                SpawnedPiece.GetComponent<EntityBase>().SpriteColor = Color.red;
+                SpawnedPiece.GetComponent<EntityBase>().RevertColour();
+>>>>>>> parent of 9342e79 (Started with the AI portion of the game)
                 Team2Script.CanPerformAction = true;
                 break;
 

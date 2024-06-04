@@ -20,24 +20,9 @@ public class PlayerFunctionality : MonoBehaviour
 
     public List<EntityBase> Entities;
 
-<<<<<<< HEAD:Painted Boomerang/Assets/Scripts/Player/PlayerFunctionality.cs
-<<<<<<<< HEAD:Painted Boomerang/Assets/Scripts/Player/PlayerFunctionality.cs
-    [Space(15), Header("Bools")]
-    [HideInInspector] public bool TurnActive;
-    [HideInInspector] public bool CanPerformAction;
-    [HideInInspector] public bool InstantBreak;
-    protected bool PlayerControlled = true;
-========
     public bool TurnActive;
     public bool CanPerformAction;
     public bool InstantBreak;
-    public bool AIControlled;
->>>>>>>> Changes-branch-1:Painted Boomerang/Assets/Scripts/PlayerFunctionality.cs
-=======
-    public bool TurnActive;
-    public bool CanPerformAction;
-    public bool InstantBreak;
->>>>>>> parent of 9342e79 (Started with the AI portion of the game):Painted Boomerang/Assets/PlayerFunctionality.cs
 
     public WorldHandler.Teams ThisTeam;
     public WorldHandler WorldHandlerScript;
@@ -72,20 +57,7 @@ public class PlayerFunctionality : MonoBehaviour
             return;
         }
         TurnsText.text = $"It is {ThisTeam}'s turn and have {MovesRemaining} moves remaining";
-<<<<<<< HEAD:Painted Boomerang/Assets/Scripts/Player/PlayerFunctionality.cs
-
-<<<<<<<< HEAD:Painted Boomerang/Assets/Scripts/Player/PlayerFunctionality.cs
-========
-        if (!AIControlled)
-        {
-            MouseFunctionalty();
-
-        }
-
->>>>>>>> Changes-branch-1:Painted Boomerang/Assets/Scripts/PlayerFunctionality.cs
-=======
         MouseFunctionalty();
->>>>>>> parent of 9342e79 (Started with the AI portion of the game):Painted Boomerang/Assets/PlayerFunctionality.cs
         if (MovesRemaining <= 0)
         {
             EndTurn();
