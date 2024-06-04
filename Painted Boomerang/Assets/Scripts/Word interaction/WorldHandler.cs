@@ -38,7 +38,7 @@ public class WorldHandler : MonoBehaviour
     public HashSet<EntityBase> Player1Entities = new HashSet<EntityBase>();
     public HashSet<EntityBase> Player2Entities = new HashSet<EntityBase>();
 
-    public GameManager GameManagerScript;
+    public ProgramManager ProgramManagerScript;
     public PopulateGrid PopulateScript;
     public PlayerFunctionality Team1Script;
     public PlayerFunctionality Team2Script;
@@ -56,12 +56,8 @@ public class WorldHandler : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        if (GameManagerScript != null)
-        {
-            return;
-        }
 
-        GameManagerScript = GameManager.GameManagerInstance;
+        ProgramManagerScript = ProgramManager.ProgramManagerInstance;
 
         WorldCellSize = 4;
 

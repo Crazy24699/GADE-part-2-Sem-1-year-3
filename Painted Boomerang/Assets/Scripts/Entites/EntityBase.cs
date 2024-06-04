@@ -6,25 +6,32 @@ using UnityEngine.UI;
 
 public class EntityBase : MonoBehaviour
 {
+    //Bools
     public bool CanInteract;
     public bool Selected;
     public bool IsMoving = false;
-
     public bool CanPerformAction = true;
+    private bool AIControlled;
 
+    //Ints
     const int MaxHealth=3;
     public int CurrentHealth;
+    public int MouseDistance;
+
 
     public Vector2Int CurrentPosition;
 
-    public Slider HealthBar;
-
     public Color SpriteColor;
 
-    public int MouseDistance;
-
+    //Scripts
+    public Slider HealthBar;
     public WorldHandler.Teams AssignedTeam;
     public PlayerFunctionality PlayerScript;
+
+    public List<AimDirections> MainDirectionsClass;
+    public List<AimDirections> OffsetDirectionsClas;
+    protected EnemyAI EnemyAIScript;
+
 
     // Start is called before the first frame update
     void Start()
@@ -33,6 +40,11 @@ public class EntityBase : MonoBehaviour
         HealthBar.minValue = 0;
         HealthBar.maxValue = MaxHealth;
         HealthBar.value = CurrentHealth;
+
+        if(AIControlled)
+        {
+            EnemyAIScript = GameObject.FindObjectOfType<EnemyAI>();
+        }
     }
 
     // Update is called once per frame
@@ -67,6 +79,30 @@ public class EntityBase : MonoBehaviour
         this.GetComponent<SpriteRenderer>().color = SpriteColor;
     }
 
+    public void CheckMainCardinalDirections()
+    {
+        foreach (var AimDirection in MainDirectionsClass)
+        {
+            RaycastHit RaycastData;
+            Physics.Raycast(transform.position, AimDirection.Direction, out RaycastData, 100, EnemyAIScript.InteractableLayers);
+
+            AimDirection.AimDistance = RaycastData.distance;
+            AimDirection.AimPoint = RaycastData.point;
+        }
+    }
+
+    public void CheckOffsetCardinalDirections()
+    {
+        foreach (var AimDirection in OffsetDirectionsClas)
+        {
+            RaycastHit RaycastData;
+            Physics.Raycast(transform.position, AimDirection.Direction, out RaycastData, 100, EnemyAIScript.InteractableLayers);
+
+            AimDirection.AimDistance = RaycastData.distance;
+            AimDirection.AimPoint = RaycastData.point;
+        }
+    }
+
     private void OnTriggerEnter2D(Collider2D Collision)
     {
         if (Collision.CompareTag("Cell"))
@@ -86,4 +122,14 @@ public class EntityBase : MonoBehaviour
             CellScript.enabled = false;
         }
     }
+}
+
+
+[System.Serializable]
+public class AimDirections
+{
+    public Vector2 Direction;
+    public Vector2 AimPoint;
+
+    public float AimDistance;
 }
