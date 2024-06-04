@@ -95,8 +95,8 @@ public class EntityBase : MonoBehaviour
     {
         foreach (var AimDirection in OffsetDirectionsClas)
         {
-            RaycastHit RaycastData;
-            Physics.Raycast(transform.position, AimDirection.Direction, out RaycastData, 100, EnemyAIScript.InteractableLayers);
+            RaycastHit2D RaycastData;
+            RaycastData = Physics2D.Raycast(transform.position, AimDirection.Direction, 100, EnemyAIScript.InteractableLayers);
 
             AimDirection.AimDistance = RaycastData.distance;
             AimDirection.AimPoint = RaycastData.point;

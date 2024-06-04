@@ -16,12 +16,12 @@ public class EnemyAI : MonoBehaviour
     public WorldHandler.Teams AssignedTeam;
     public LayerMask InteractableLayers;
     public EntityBase ChosenPiece;
-
+    public PlayerFunctionality ThisPlayerScript;
 
     //Bools
     [HideInInspector] public bool EnemyInRange;
     [HideInInspector]public bool CanThrow = true;
-    private bool GameStarted = false;
+    public bool GameStarted = false;
     public bool PieceSelected;
     public bool LowHealthPiece;
 
@@ -40,40 +40,23 @@ public class EnemyAI : MonoBehaviour
 
         }
 
+        PlayerFunctionality[] PlayerScripts = FindObjectsByType<PlayerFunctionality>(FindObjectsSortMode.None);
+        foreach (var Script in PlayerScripts)
+        {
+            if(Script.ThisTeam==AssignedTeam)
+            {
+                ThisPlayerScript = Script;
+                break;
+            }
+        }
+
+        BehaviourTreeScript.BehaviourTreeStartup();
     }
 
     // Update is called once per frame
     void Update()
     {
 
-
-
-
-    }
-
-    private void FixedUpdate()
-    {
-        
-    }
-
-    public void MakeDecision()
-    {
-
-    }
-
-
-    protected void SelectPiece()
-    {
-
-    }
-
-
-
-    private void PerformPieceAction()
-    {
-
-
-        GameStarted = true;
     }
 
 

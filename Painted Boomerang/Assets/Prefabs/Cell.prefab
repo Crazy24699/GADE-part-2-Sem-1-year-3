@@ -102,6 +102,10 @@ MonoBehaviour:
   Location: {x: 0, y: 0}
   WorldLocation: {x: 0, y: 0}
   NearCells: []
+  ObstacleNear: 0
+  IsBorderCell: 0
+  StartingCell: 0
+  Populated: 0
   HitLayers:
     serializedVersion: 2
     m_Bits: 2048
@@ -148,5 +152,5 @@ BoxCollider2D:
     adaptiveTiling: 0
   m_AutoTiling: 0
   serializedVersion: 2
-  m_Size: {x: 1, y: 1}
+  m_Size: {x: 0.96854407, y: 0.9686643}
   m_EdgeRadius: 0

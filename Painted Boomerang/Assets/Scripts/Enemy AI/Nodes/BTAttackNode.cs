@@ -35,7 +35,7 @@ public class BTAttackNode : BTNodeBase
     public override NodeStateOptions RunNodeLogicAndStatus()
     {
 
-        if (Distance <= 2) 
+        if (Distance >= 2) 
         {
             Debug.Log("evil roams");
             ThrowingLogic();

@@ -112,7 +112,7 @@ public class PlayerFunctionality : MonoBehaviour
 
         if (HitCollider == null)
         {
-            Debug.Log("Hit");
+            //Debug.Log("Hit");
             return;
         }
         
@@ -155,7 +155,7 @@ public class PlayerFunctionality : MonoBehaviour
         {
             SelectedEntity = HitCollider.gameObject;
             SelectedEntity.GetComponent<SpriteRenderer>().color = Color.yellow;
-            Debug.Log("entity");
+            //Debug.Log("entity");
         }
         else if (HitCollider.gameObject.CompareTag("Cell") && SelectedEntity != null)
         {
