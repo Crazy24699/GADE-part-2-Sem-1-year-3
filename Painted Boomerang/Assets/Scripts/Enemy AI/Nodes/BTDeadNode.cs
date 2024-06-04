@@ -17,6 +17,7 @@ public class BTDeadNode : BTNodeBase
         //    Debug.Log("bulletproog");
         //    return NodeStateOptions.Running;
         //}
+        Debug.Log("spirefire");
         return NodeStateOptions.Fail;
     }
 }

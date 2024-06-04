@@ -13,7 +13,8 @@ public class EnemyAI : MonoBehaviour
 
     //Scripts
     public BehaviourTree BehaviourTreeScript;
-    public WorldHandler.Teams AssignedTeam;
+    public Teams AssignedTeam;
+    protected WorldHandler WorldHandlerScript;
     public LayerMask InteractableLayers;
     public EntityBase ChosenPiece;
     public PlayerFunctionality ThisPlayerScript;
@@ -26,37 +27,35 @@ public class EnemyAI : MonoBehaviour
     public bool LowHealthPiece;
 
     //Floats
-    protected float TimerLength=2.5f;
+    protected float TimerLength = 2.5f;
     protected float CurrentTime;
 
-    // Start is called before the first frame update
-    void Start()
+    public void AIStartup()
     {
-
-        PiecesInPlay = GetAllPieces();
-
-        if (GameStarted)
-        {
-
-        }
+        WorldHandlerScript = GameObject.FindObjectOfType<WorldHandler>();
 
         PlayerFunctionality[] PlayerScripts = FindObjectsByType<PlayerFunctionality>(FindObjectsSortMode.None);
         foreach (var Script in PlayerScripts)
         {
-            if(Script.ThisTeam==AssignedTeam)
+            if (Script.ThisTeam == AssignedTeam)
             {
                 ThisPlayerScript = Script;
                 break;
             }
         }
-
+        Debug.Log("Gutter");
+        PiecesInPlay = GetAllPieces();
+        BehaviourTreeScript = GameObject.FindObjectOfType<BehaviourTree>();
         BehaviourTreeScript.BehaviourTreeStartup();
     }
 
     // Update is called once per frame
     void Update()
     {
-
+        if (Input.GetKeyDown(KeyCode.X))
+        {
+            
+        }
     }
 
 
@@ -72,6 +71,7 @@ public class EnemyAI : MonoBehaviour
             if (FoundPiece.AssignedTeam == AssignedTeam) 
             {
                 Pieces.Add(FoundPiece.gameObject);
+                FoundPiece.Startup();
             }
         }
 

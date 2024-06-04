@@ -9,16 +9,29 @@ public class LoadingScreen : MonoBehaviour
 
     public GameObject LoadingPanel;
 
-    public int MaxLoadingTime;
+    [SerializeField]protected int MaxLoadingTime;
     public float CurrentTime;
 
     public Slider LoadingSlider;
 
+    protected WorldHandler WorldHandlerScript;
+
     // Start is called before the first frame update
     void Start()
     {
+        WorldHandlerScript = FindObjectOfType<WorldHandler>();
         CurrentTime = MaxLoadingTime;
         RunTimer();
+        InvokeRepeating("CheckLoadTimer", 0, 0.25f);
+    }
+
+    protected void CheckLoadTimer()
+    {
+        if (CurrentTime < MaxLoadingTime / 2.5f) 
+        {
+            WorldHandlerScript.StartupScripts();
+            CancelInvoke();
+        }
     }
 
     public void SetLoadingTime()

@@ -858,9 +858,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 355600632}
-  - component: {fileID: 355600634}
   - component: {fileID: 355600633}
-  - component: {fileID: 355600635}
   m_Layer: 0
   m_Name: Team 2
   m_TagString: Untagged
@@ -895,7 +893,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8a537d152068b154b9ac2d5507f3ff94, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  SelectedEntity: {fileID: 0}
   BoomerangObject: {fileID: 6648229833626570824, guid: e9b1c06cadb25cb4a8beeb3a5dc76a5b, type: 3}
   MovesRemaining: 0
   CellCursorLocation: {x: 0, y: 0}
@@ -906,60 +903,18 @@ MonoBehaviour:
   SelectableLayers:
     serializedVersion: 2
     m_Bits: 3584
-  Entities: []
   TurnActive: 0
   CanPerformAction: 0
   InstantBreak: 0
   AIControlled: 0
+  StartupRan: 0
+  Entities: []
   ThisTeam: 1
   WorldHandlerScript: {fileID: 0}
-  TurnsText: {fileID: 395370459}
   BoomerangIcon: {fileID: 8937828928543727559, guid: 29e9541b061fdce4eb500cfddfa33601, type: 3}
   MoveIcon: {fileID: 1742779154123619856, guid: f4b55a436d3909a4380118cac9690c76, type: 3}
   TrackedIcon: {fileID: 675563574}
---- !u!114 &355600634
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 355600631}
-  m_Enabled: 0
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 411b66416010e3e48b9129606fd4bfd7, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  PiecesInPlay: []
-  BoomerangRef: {fileID: 0}
-  BehaviourTreeScript: {fileID: 355600635}
-  AssignedTeam: 0
-  InteractableLayers:
-    serializedVersion: 2
-    m_Bits: 576
-  ChosenPiece: {fileID: 0}
-  ThisPlayerScript: {fileID: 0}
-  EnemyInRange: 0
-  CanThrow: 1
-  GameStarted: 0
-  PieceSelected: 0
-  LowHealthPiece: 0
---- !u!114 &355600635
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 355600631}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: f7ef598c369e0b54c9b537dedf362c4c, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  RootNode:
-    CurrentNodeState: 0
-  AllChoiceOptions: []
-  EnemySelfRef: {fileID: 355600631}
-  StartupRan: 0
+  TurnsText: {fileID: 395370459}
 --- !u!1 &360711062
 GameObject:
   m_ObjectHideFlags: 0
@@ -3019,7 +2974,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8a537d152068b154b9ac2d5507f3ff94, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  SelectedEntity: {fileID: 0}
   BoomerangObject: {fileID: 6648229833626570824, guid: e9b1c06cadb25cb4a8beeb3a5dc76a5b, type: 3}
   MovesRemaining: 2
   CellCursorLocation: {x: 0, y: 0}
@@ -3030,17 +2984,18 @@ MonoBehaviour:
   SelectableLayers:
     serializedVersion: 2
     m_Bits: 3584
-  Entities: []
   TurnActive: 0
   CanPerformAction: 0
   InstantBreak: 0
   AIControlled: 0
+  StartupRan: 0
+  Entities: []
   ThisTeam: 0
   WorldHandlerScript: {fileID: 0}
-  TurnsText: {fileID: 395370459}
   BoomerangIcon: {fileID: 8937828928543727559, guid: 29e9541b061fdce4eb500cfddfa33601, type: 3}
   MoveIcon: {fileID: 1742779154123619856, guid: f4b55a436d3909a4380118cac9690c76, type: 3}
   TrackedIcon: {fileID: 675563574}
+  TurnsText: {fileID: 395370459}
 --- !u!1 &1782878055
 GameObject:
   m_ObjectHideFlags: 0

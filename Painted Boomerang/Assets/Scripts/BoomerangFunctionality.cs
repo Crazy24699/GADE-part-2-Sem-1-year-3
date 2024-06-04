@@ -20,7 +20,7 @@ public class BoomerangFunctionality : MonoBehaviour
     protected float CurrentSpeed;
     protected Rigidbody2D RB2D;
 
-    public WorldHandler.Teams ThisTeam;
+    public Teams ThisTeam;
     public PlayerFunctionality PlayerParent;
 
     public GameObject ParentEntity;

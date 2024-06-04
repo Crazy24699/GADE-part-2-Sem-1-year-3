@@ -25,23 +25,29 @@ public class EntityBase : MonoBehaviour
 
     //Scripts
     public Slider HealthBar;
-    public WorldHandler.Teams AssignedTeam;
+    public Teams AssignedTeam;
     public PlayerFunctionality PlayerScript;
 
     public List<AimDirections> MainDirectionsClass;
     public List<AimDirections> OffsetDirectionsClas;
-    protected EnemyAI EnemyAIScript;
+    [SerializeField]protected EnemyAI EnemyAIScript;
 
 
     // Start is called before the first frame update
     void Start()
     {
+        Startup();
+    }
+
+    public void Startup()
+    {
+        AIControlled = PlayerScript.AIControlled;
         CurrentHealth = MaxHealth;
         HealthBar.minValue = 0;
         HealthBar.maxValue = MaxHealth;
         HealthBar.value = CurrentHealth;
 
-        if(AIControlled)
+        if (AIControlled)
         {
             EnemyAIScript = GameObject.FindObjectOfType<EnemyAI>();
         }
@@ -59,6 +65,14 @@ public class EntityBase : MonoBehaviour
     public void MoveEntity(Vector2Int CellCord)
     {
         this.transform.position = new Vector3(CellCord.x, CellCord.y);
+    }
+
+    public void SetEntityInfo(PlayerFunctionality PlayerScriptRef,Color TeamColour, Teams SetTeam)
+    {
+        AssignedTeam = SetTeam;
+        PlayerScript = PlayerScriptRef;
+        SpriteColor = TeamColour;
+        RevertColour();
     }
 
     public int HandleHealth(int HealthChange)
@@ -84,10 +98,11 @@ public class EntityBase : MonoBehaviour
         foreach (var AimDirection in MainDirectionsClass)
         {
             RaycastHit RaycastData;
-            Physics.Raycast(transform.position, AimDirection.Direction, out RaycastData, 100, EnemyAIScript.InteractableLayers);
+            Physics.Raycast(transform.position, AimDirection.Direction, out RaycastData, 100f, EnemyAIScript.InteractableLayers);
 
             AimDirection.AimDistance = RaycastData.distance;
             AimDirection.AimPoint = RaycastData.point;
+
         }
     }
 
@@ -95,6 +110,7 @@ public class EntityBase : MonoBehaviour
     {
         foreach (var AimDirection in OffsetDirectionsClas)
         {
+            
             RaycastHit2D RaycastData;
             RaycastData = Physics2D.Raycast(transform.position, AimDirection.Direction, 100, EnemyAIScript.InteractableLayers);
 
