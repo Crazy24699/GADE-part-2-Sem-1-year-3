@@ -8,7 +8,7 @@ public class MainMenu : MonoBehaviour
 
     public void StartGame()
     {
-        SceneManager.LoadScene("Main Level");
+        SceneManager.LoadScene("PVP");
     }
 
     public void QuitGame()
