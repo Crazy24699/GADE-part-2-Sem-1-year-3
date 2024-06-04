@@ -218,6 +218,9 @@ public class WorldHandler : MonoBehaviour
 =======
                 SpawnedPiece.GetComponent<EntityBase>().SpriteColor = Color.green;
                 SpawnedPiece.GetComponent<EntityBase>().RevertColour();
+<<<<<<< HEAD
+>>>>>>> parent of 9342e79 (Started with the AI portion of the game)
+=======
 >>>>>>> parent of 9342e79 (Started with the AI portion of the game)
                 Team1Script.CanPerformAction = true;
                 break;
@@ -231,6 +234,9 @@ public class WorldHandler : MonoBehaviour
 =======
                 SpawnedPiece.GetComponent<EntityBase>().SpriteColor = Color.red;
                 SpawnedPiece.GetComponent<EntityBase>().RevertColour();
+<<<<<<< HEAD
+>>>>>>> parent of 9342e79 (Started with the AI portion of the game)
+=======
 >>>>>>> parent of 9342e79 (Started with the AI portion of the game)
                 Team2Script.CanPerformAction = true;
                 break;
