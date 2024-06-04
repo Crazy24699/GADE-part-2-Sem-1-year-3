@@ -46,10 +46,7 @@ public class CellFunctionality : MonoBehaviour
 
     public void HandleMouse()
     {
-        if (!GameManager.GameManagerInstance.GameStarted || !this.isActiveAndEnabled)
-        {
-            return;
-        }
+        
 
 
         RaycastHit2D RayHit = Physics2D.Raycast(Camera.main.ScreenToWorldPoint(Input.mousePosition), Vector2.zero, Mathf.Infinity, HitLayers);
@@ -120,10 +117,7 @@ public class CellFunctionality : MonoBehaviour
 
     private void OnMouseExit()
     {
-        if (!GameManager.GameManagerInstance.GameStarted || !this.isActiveAndEnabled)
-        {
-            return;
-        }
+        
         
     }
 

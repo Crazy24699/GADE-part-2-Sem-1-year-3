@@ -9,6 +9,9 @@ EditorBuildSettings:
     path: Assets/Scenes/Main Menu.unity
     guid: 4aa51b5ce4d25b946a31f260c9387f7d
   - enabled: 1
-    path: Assets/Scenes/Main Level.unity
+    path: Assets/Scenes/PVP.unity
     guid: 2cda990e2423bbf4892e6590ba056729
+  - enabled: 1
+    path: Assets/Scenes/PVC.unity
+    guid: 93c3b1951f7495a4a91aadc40dc7249e
   m_configObjects: {}

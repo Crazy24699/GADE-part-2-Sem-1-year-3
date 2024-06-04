@@ -35,7 +35,7 @@ public class WorldHandler : MonoBehaviour
     [Space(10)]
     public HashSet<CellFunctionality> AllCells = new HashSet<CellFunctionality>();
 
-    public GameManager GameManagerScript;
+    public ProgramManager ProgramManagerScript;
     public PopulateGrid PopulateScript;
     public PlayerFunctionality Team1Script;
     public PlayerFunctionality Team2Script;
@@ -53,12 +53,8 @@ public class WorldHandler : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        if (GameManagerScript != null)
-        {
-            return;
-        }
 
-        GameManagerScript = GameManager.GameManagerInstance;
+        ProgramManagerScript = ProgramManager.ProgramManagerInstance;
 
         WorldCellSize = 4;
 

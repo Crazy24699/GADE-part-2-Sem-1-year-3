@@ -389,7 +389,7 @@ GameObject:
   - component: {fileID: 168159100336367314}
   - component: {fileID: 78164884618370000}
   - component: {fileID: 5491101524186421788}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: WallCell
   m_TagString: BreakWall
   m_Icon: {fileID: 0}
