@@ -389,6 +389,7 @@ GameObject:
   - component: {fileID: 168159100336367314}
   - component: {fileID: 78164884618370000}
   - component: {fileID: 5491101524186421788}
+  - component: {fileID: 6989578572768291101}
   m_Layer: 6
   m_Name: WallCell
   m_TagString: BreakWall
@@ -507,7 +508,7 @@ BoxCollider2D:
     adaptiveTiling: 0
   m_AutoTiling: 0
   serializedVersion: 2
-  m_Size: {x: 1, y: 1}
+  m_Size: {x: 0.9656733, y: 0.96907663}
   m_EdgeRadius: 0
 --- !u!114 &5491101524186421788
 MonoBehaviour:
@@ -524,3 +525,32 @@ MonoBehaviour:
   CurrentHealth: 0
   HealthSlider: {fileID: 0}
   CanTakeDamage: 0
+  BaseCellScript: {fileID: 0}
+  WorldLocation: {x: 0, y: 0}
+--- !u!50 &6989578572768291101
+Rigidbody2D:
+  serializedVersion: 4
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4653421706863708112}
+  m_BodyType: 0
+  m_Simulated: 1
+  m_UseFullKinematicContacts: 0
+  m_UseAutoMass: 0
+  m_Mass: 1
+  m_LinearDrag: 0
+  m_AngularDrag: 0.05
+  m_GravityScale: 0
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_Interpolate: 0
+  m_SleepingMode: 1
+  m_CollisionDetection: 0
+  m_Constraints: 7

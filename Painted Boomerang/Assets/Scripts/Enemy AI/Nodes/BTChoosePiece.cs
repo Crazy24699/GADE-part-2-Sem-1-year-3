@@ -13,10 +13,10 @@ public class BTChoosePiece : BTNodeBase
     public GameObject SelfRef;
 
     //Bools
-    protected bool PieceSelected = false;
+    protected bool HasSelectedPiece = false;
 
     //Gameobejcts
-    public EntityBase SelectedPiece;
+    public EntityBase PieceSelected;
 
 
     public BTChoosePiece(GameObject EnemyAIRef)
@@ -29,8 +29,21 @@ public class BTChoosePiece : BTNodeBase
 
     public override NodeStateOptions RunNodeLogicAndStatus()
     {
+        switch (EnemyAIScript.GameStarted)
+        {
+            case true:
+                SelectPiece();
+                break;
 
-        return NodeStateOptions.Running;
+            case false:
+                int RandomPiece = Random.Range(0, EnemyAIScript.PiecesInPlay.Count);
+                PieceSelected = EnemyAIScript.PiecesInPlay[RandomPiece].GetComponent<EntityBase>();
+                break;
+
+
+        }
+        
+        return NodeStateOptions.Fail;
     }
 
     public void SelectPiece()
@@ -41,10 +54,10 @@ public class BTChoosePiece : BTNodeBase
             if (PieceScript.CurrentHealth < PieceScript.CurrentHealth / 2)
             {
 
-                if (SelectedPiece == null || PieceScript.CurrentHealth < SelectedPiece.CurrentHealth)
+                if (PieceSelected == null || PieceScript.CurrentHealth < PieceSelected.CurrentHealth)
                 {
-                    SelectedPiece = PieceScript;
-                    EnemyAIScript.ChosenPiece = SelectedPiece;
+                    PieceSelected = PieceScript;
+                    EnemyAIScript.ChosenPiece = PieceSelected;
                     EnemyAIScript.PieceSelected = true;
                     return;
                 }

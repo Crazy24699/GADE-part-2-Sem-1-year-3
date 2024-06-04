@@ -16,10 +16,10 @@ public class WorldHandler : MonoBehaviour
     private int AreaCellLength;
     protected int WorldCellSize;
     [Space(5)]
-    
+
 
     [Space(10)]
-    public bool CanMakeMove;
+    protected bool AIControlledPiece;
 
     [Space(10)]
     public GameObject TilePrefab;

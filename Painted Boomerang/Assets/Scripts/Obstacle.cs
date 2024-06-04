@@ -9,6 +9,10 @@ public class Obstacle : MonoBehaviour
     public int CurrentHealth;
     public Slider HealthSlider;
     public bool CanTakeDamage;
+
+    public CellFunctionality BaseCellScript;
+    public Vector2Int WorldLocation;
+
     // Start is called before the first frame update
     void Start()
     {
@@ -19,7 +23,7 @@ public class Obstacle : MonoBehaviour
         HealthSlider.value = CurrentHealth;
 
         CanTakeDamage = true;
-
+        WorldLocation = Vector2Int.RoundToInt(this.gameObject.transform.position);
     }
 
     // Update is called once per frame
@@ -53,6 +57,18 @@ public class Obstacle : MonoBehaviour
                 TakeDamage(BoomerangScript.Damage);
             }
 
+        }
+
+    }
+
+    private void OnTriggerEnter2D(Collider2D Collision)
+    {
+        if (Collision.CompareTag("Cell"))
+        {
+            if (Collision.GetComponent<CellFunctionality>().WorldLocation == WorldLocation)
+            {
+                BaseCellScript = Collision.GetComponent<CellFunctionality>();
+            }
         }
     }
 

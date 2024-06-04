@@ -858,7 +858,9 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 355600632}
+  - component: {fileID: 355600634}
   - component: {fileID: 355600633}
+  - component: {fileID: 355600635}
   m_Layer: 0
   m_Name: Team 2
   m_TagString: Untagged
@@ -875,7 +877,7 @@ Transform:
   m_GameObject: {fileID: 355600631}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -7.1231523, y: 3.6275775, z: -1}
+  m_LocalPosition: {x: 0, y: 0, z: -1}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -908,12 +910,56 @@ MonoBehaviour:
   TurnActive: 0
   CanPerformAction: 0
   InstantBreak: 0
+  AIControlled: 0
   ThisTeam: 1
   WorldHandlerScript: {fileID: 0}
   TurnsText: {fileID: 395370459}
   BoomerangIcon: {fileID: 8937828928543727559, guid: 29e9541b061fdce4eb500cfddfa33601, type: 3}
   MoveIcon: {fileID: 1742779154123619856, guid: f4b55a436d3909a4380118cac9690c76, type: 3}
   TrackedIcon: {fileID: 675563574}
+--- !u!114 &355600634
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 355600631}
+  m_Enabled: 0
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 411b66416010e3e48b9129606fd4bfd7, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  PiecesInPlay: []
+  BoomerangRef: {fileID: 0}
+  BehaviourTreeScript: {fileID: 355600635}
+  AssignedTeam: 0
+  InteractableLayers:
+    serializedVersion: 2
+    m_Bits: 576
+  ChosenPiece: {fileID: 0}
+  ThisPlayerScript: {fileID: 0}
+  EnemyInRange: 0
+  CanThrow: 1
+  GameStarted: 0
+  PieceSelected: 0
+  LowHealthPiece: 0
+--- !u!114 &355600635
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 355600631}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f7ef598c369e0b54c9b537dedf362c4c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  RootNode:
+    CurrentNodeState: 0
+  AllChoiceOptions: []
+  EnemySelfRef: {fileID: 355600631}
+  StartupRan: 0
 --- !u!1 &360711062
 GameObject:
   m_ObjectHideFlags: 0
@@ -1355,7 +1401,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 359466f784b290747b26f46c8a058d41, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  CanMakeMove: 0
   TilePrefab: {fileID: 4033228640488970289, guid: 85b882614614dde429e6bd396c5334ef, type: 3}
   LoadingScreenPanel: {fileID: 1528479268}
   ObstacleGridChoices:
@@ -1366,7 +1411,7 @@ MonoBehaviour:
   PlayPieceRef: {fileID: 2543501963366461084, guid: 5f4bfa46055599a4296a1e672fbb000e, type: 3}
   ActivatedCell: {fileID: 2097079565}
   EndGamePanel: {fileID: 1229489933}
-  GameManagerScript: {fileID: 0}
+  ProgramManagerScript: {fileID: 0}
   PopulateScript: {fileID: 0}
   Team1Script: {fileID: 1650979151}
   Team2Script: {fileID: 355600633}
@@ -1873,7 +1918,6 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 864319816}
-  - component: {fileID: 864319815}
   m_Layer: 0
   m_Name: Game Manager
   m_TagString: Untagged
@@ -1881,20 +1925,6 @@ GameObject:
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
---- !u!114 &864319815
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 864319814}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: f26c7bb624474c94689cf2eb4258c708, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  GameStarted: 1
-  CellSize: 0
 --- !u!4 &864319816
 Transform:
   m_ObjectHideFlags: 0
@@ -2971,7 +3001,7 @@ Transform:
   m_GameObject: {fileID: 1650979149}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -7.1231523, y: 3.6275775, z: -1}
+  m_LocalPosition: {x: 0, y: 0, z: -1}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -3004,6 +3034,7 @@ MonoBehaviour:
   TurnActive: 0
   CanPerformAction: 0
   InstantBreak: 0
+  AIControlled: 0
   ThisTeam: 0
   WorldHandlerScript: {fileID: 0}
   TurnsText: {fileID: 395370459}
