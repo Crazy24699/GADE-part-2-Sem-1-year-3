@@ -122,7 +122,7 @@ public class PlayerFunctionality : MonoBehaviour
         {
             if (SelectedEntity != null)
             {
-                SelectedEntity.GetComponent<EntityBase>().RevertColour();
+                SelectedEntity.GetComponent<SpriteRenderer>().color = Color.white;
                 SelectedEntity = null;
             }
 
@@ -194,7 +194,7 @@ public class PlayerFunctionality : MonoBehaviour
             {
                 EntityScript.MoveEntity(new Vector2Int(CellScript.WorldLocation.x, CellScript.WorldLocation.y));
                 MovesRemaining--;
-                SelectedEntity.GetComponent<EntityBase>().RevertColour();
+                SelectedEntity.GetComponent<SpriteRenderer>().color = Color.white;
                 SelectedEntity = null;
             }
             else
@@ -224,7 +224,7 @@ public class PlayerFunctionality : MonoBehaviour
             BoomerangeScriptRef.Damage = 100;
             BoomerangeScriptRef.InstantBreak = true;
         }
-        SelectedEntity.GetComponent<EntityBase>().RevertColour();
+        SelectedEntity.GetComponent<SpriteRenderer>().color = Color.white;
         SelectedEntity = null;
 
         //SelectedEntity = null;

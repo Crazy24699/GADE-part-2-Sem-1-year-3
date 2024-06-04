@@ -2,7 +2,6 @@ using System.Collections;
 using System.Collections.Generic;
 using Unity.VisualScripting;
 using UnityEngine;
-using UnityEngine.UI;
 
 public class EntityBase : MonoBehaviour
 {
@@ -21,7 +20,10 @@ public class EntityBase : MonoBehaviour
 
     public Vector2Int CurrentPosition;
 
+<<<<<<< HEAD
     public Color SpriteColor;
+=======
+>>>>>>> parent of 71cab8e (Minor tweaks)
 
     //Scripts
     public Slider HealthBar;
@@ -37,6 +39,7 @@ public class EntityBase : MonoBehaviour
     void Start()
     {
         CurrentHealth = MaxHealth;
+<<<<<<< HEAD
         HealthBar.minValue = 0;
         HealthBar.maxValue = MaxHealth;
         HealthBar.value = CurrentHealth;
@@ -45,6 +48,8 @@ public class EntityBase : MonoBehaviour
         {
             EnemyAIScript = GameObject.FindObjectOfType<EnemyAI>();
         }
+=======
+>>>>>>> parent of 71cab8e (Minor tweaks)
     }
 
     // Update is called once per frame
@@ -53,7 +58,6 @@ public class EntityBase : MonoBehaviour
         Vector2 MousePosition = Camera.main.ScreenToWorldPoint(Input.mousePosition);
         //MouseDistance = new Vector2Int(Mathf.RoundToInt(Mathf.Abs(MousePosition.x - transform.position.x)), Mathf.RoundToInt(Mathf.Abs(MousePosition.y - transform.position.y)));
         MouseDistance = Mathf.RoundToInt(Mathf.Abs(Vector2.Distance(this.transform.position, MousePosition)));
-        HealthBar.value = CurrentHealth ;
     }
 
     public void MoveEntity(Vector2Int CellCord)
@@ -74,6 +78,7 @@ public class EntityBase : MonoBehaviour
         return CurrentHealth;
     }
 
+<<<<<<< HEAD
     public void RevertColour()
     {
         this.GetComponent<SpriteRenderer>().color = SpriteColor;
@@ -103,6 +108,8 @@ public class EntityBase : MonoBehaviour
         }
     }
 
+=======
+>>>>>>> parent of 71cab8e (Minor tweaks)
     private void OnTriggerEnter2D(Collider2D Collision)
     {
         if (Collision.CompareTag("Cell"))

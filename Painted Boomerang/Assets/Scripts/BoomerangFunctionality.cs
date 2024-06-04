@@ -28,10 +28,6 @@ public class BoomerangFunctionality : MonoBehaviour
 
     [SerializeField]protected Collider2D BounceCollider;
 
-    //internal damage cooldown
-    private float DamageDownTime = 0.5f;
-    private float CurrentTime = 0;
-
     void Start()
     {
         BounceCollider = GetComponent<Collider2D>();
@@ -52,19 +48,6 @@ public class BoomerangFunctionality : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        if(!CanApplyDamage)
-        {
-            CurrentTime -= Time.deltaTime;
-            if (CurrentTime <= 0)
-            {
-                CanApplyDamage = true;
-            }
-        }
-        else
-        {
-            CurrentTime = DamageDownTime;
-        }
-
         if(BouncesRemaining <= 0)
         {
             BouncesRemaining = 0;
@@ -72,7 +55,7 @@ public class BoomerangFunctionality : MonoBehaviour
             BounceCollider.excludeLayers = new LayerMask();
             Direction = (ParentEntity.transform.position- transform.position).normalized;
             ParentEntity.GetComponent<Collider2D>().excludeLayers = new LayerMask();
-            RB2D.velocity = Direction * 55;
+            RB2D.velocity = Direction * 35;
         }
         LastVel = RB2D.velocity;
     }
