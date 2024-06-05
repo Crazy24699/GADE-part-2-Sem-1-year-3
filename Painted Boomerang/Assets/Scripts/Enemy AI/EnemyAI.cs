@@ -5,10 +5,12 @@ using UnityEngine;
 
 public class EnemyAI : MonoBehaviour
 {
+
+    public Vector2 Direcitonal;
     //Gameobjects
 
     protected GameObject EnemyBase;
-    [HideInInspector]public List<GameObject> PiecesInPlay = new List<GameObject>();
+    public List<GameObject> PiecesInPlay = new List<GameObject>();
     [SerializeField] protected GameObject BoomerangRef;
 
     //Scripts
@@ -49,15 +51,75 @@ public class EnemyAI : MonoBehaviour
         BehaviourTreeScript.BehaviourTreeStartup();
     }
 
-    // Update is called once per frame
     void Update()
     {
-        if (Input.GetKeyDown(KeyCode.X))
+        if(ChosenPiece == null)
         {
-            
+            return;
+        }
+        DrawBouncingRay(ChosenPiece.transform.position, Direcitonal, 3);
+    }
+
+    void DrawBouncingRay(Vector2 origin, Vector2 direction, int remainingBounces)
+    {
+        Vector2 currentOrigin = origin;
+        Vector2 currentDirection = direction;
+        float remainingDistance = 10000;
+
+        for (int i = 0; i < 3; i++)
+        {
+            RaycastHit2D hit = Physics2D.Raycast(currentOrigin, currentDirection, Mathf.Infinity, InteractableLayers);
+
+            if (hit.collider != null)
+            {
+                // Draw the current segment of the ray
+                Debug.DrawLine(currentOrigin, hit.point, Color.red);
+
+                // Calculate the reflection direction
+                currentDirection = Vector2.Reflect(currentDirection, hit.normal);
+
+                // Update the origin to the hit point
+                currentOrigin = hit.point;
+                Debug.Log(currentOrigin);
+                // Reduce the remaining distance
+                remainingDistance -= Vector2.Distance(currentOrigin, hit.point);
+
+                // Check if there are remaining bounces
+                if (remainingBounces > 0)
+                {
+                    remainingBounces--;
+                }
+                else
+                {
+                    break;
+                }
+            }
+            else
+            {
+                // Draw the remaining segment of the ray
+                Debug.DrawLine(currentOrigin, currentOrigin + currentDirection * remainingDistance, Color.red);
+                Debug.Log("Ruin");
+                break;
+            }
         }
     }
 
+    public void AIChangePieceState(bool PieceStateChange)
+    {
+        switch (PieceStateChange)
+        {
+            case true:
+                ThisPlayerScript.SelectPiece(ChosenPiece.gameObject);
+                PieceSelected = true;
+                break;
+
+            case false:
+                ThisPlayerScript.DeselectPiece();
+                ChosenPiece = null;
+                PieceSelected = false;
+                break;
+        }
+    }
 
     public List<GameObject> GetAllPieces()
     {

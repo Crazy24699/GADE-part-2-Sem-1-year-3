@@ -8,7 +8,7 @@ using UnityEngine.UI;
 public class PlayerFunctionality : MonoBehaviour
 {
     [Space(5), Header(" ")]
-    protected GameObject SelectedEntity;
+    public GameObject SelectedEntity;
     public GameObject BoomerangObject;
 
     [Space(5), Header(" ")]
@@ -31,7 +31,8 @@ public class PlayerFunctionality : MonoBehaviour
     public bool StartupRan;
 
     [Space(5), Header(" ")]
-    public List<EntityBase> Entities;
+    public List<EntityBase> OwnPieces;
+    public List<EntityBase> EnemyPieces;
     public Teams ThisTeam;
     public WorldHandler WorldHandlerScript;
 
@@ -51,10 +52,21 @@ public class PlayerFunctionality : MonoBehaviour
             EnemyAIScript.AssignedTeam = ThisTeam;
             EnemyAIScript.AIStartup();
         }
-        foreach (var Piece in Entities)
+        foreach (var Piece in OwnPieces)
         {
             Piece.Startup();
         }
+
+        HashSet<EntityBase> AllPieces = new HashSet<EntityBase>();
+        AllPieces = GameObject.FindObjectsByType<EntityBase>(FindObjectsSortMode.None).ToHashSet();
+        foreach (var Piece in AllPieces)
+        {
+            if (Piece.AssignedTeam != ThisTeam)
+            {
+                EnemyPieces.Add(Piece);
+            }
+        }
+
         StartupRan = true;
     }
 
@@ -62,7 +74,7 @@ public class PlayerFunctionality : MonoBehaviour
     {
         WorldHandlerScript.ActivatedCell.transform.position = ActiveCellLocation;
         Debug.Log("Went");
-        foreach (EntityBase Entity in Entities)
+        foreach (EntityBase Entity in OwnPieces)
         {
             Debug.Log("Active");
             Entity.gameObject.GetComponent<Collider2D>().excludeLayers = ExclusionLayers;
@@ -94,7 +106,7 @@ public class PlayerFunctionality : MonoBehaviour
         if (MovesRemaining <= 0) 
         {
             MovesRemaining = 0;
-            foreach (EntityBase Entity in Entities)
+            foreach (EntityBase Entity in OwnPieces)
             {
                 Entity.gameObject.GetComponent<Collider2D>().excludeLayers = new LayerMask();
                 SelectedEntity = null;
@@ -106,7 +118,7 @@ public class PlayerFunctionality : MonoBehaviour
 
     public void CheckPieces()
     {
-        if(Entities.Count == 0)
+        if(OwnPieces.Count == 0)
         {
             WorldHandlerScript.EndGame(ThisTeam);
         }
@@ -117,12 +129,7 @@ public class PlayerFunctionality : MonoBehaviour
 
         if (Input.GetMouseButtonDown(1))
         {
-            if (SelectedEntity != null)
-            {
-                SelectedEntity.GetComponent<EntityBase>().RevertColour();
-                SelectedEntity = null;
-            }
-
+            DeselectPiece();
         }
 
         RaycastHit2D RayHit = Physics2D.Raycast(Camera.main.ScreenToWorldPoint(Input.mousePosition), Vector2.zero, Mathf.Infinity, SelectableLayers);
@@ -167,12 +174,28 @@ public class PlayerFunctionality : MonoBehaviour
         TrackedIcon.transform.position = Input.mousePosition;
     }
 
+    public void DeselectPiece()
+    {
+        if (SelectedEntity != null)
+        {
+            SelectedEntity.GetComponent<EntityBase>().RevertColour();
+            SelectedEntity.layer = LayerMask.NameToLayer("Pieces");
+            SelectedEntity = null;
+        }
+    }
+
+    public void SelectPiece(GameObject SelectedPiece)
+    {
+        SelectedEntity = SelectedPiece;
+        SelectedEntity.GetComponent<SpriteRenderer>().color = Color.yellow;
+        SelectedEntity.layer = LayerMask.NameToLayer("ActivePiece");
+    }
+
     public void MoveSelection(Collider2D HitCollider)
     {
         if (HitCollider.CompareTag("Entity") && HitCollider.GetComponent<EntityBase>().AssignedTeam == ThisTeam)
         {
-            SelectedEntity = HitCollider.gameObject;
-            SelectedEntity.GetComponent<SpriteRenderer>().color = Color.yellow;
+            SelectPiece(HitCollider.gameObject);
             //Debug.Log("entity");
         }
         else if (HitCollider.gameObject.CompareTag("Cell") && SelectedEntity != null)
@@ -191,8 +214,7 @@ public class PlayerFunctionality : MonoBehaviour
             {
                 EntityScript.MoveEntity(new Vector2Int(CellScript.WorldLocation.x, CellScript.WorldLocation.y));
                 MovesRemaining--;
-                SelectedEntity.GetComponent<EntityBase>().RevertColour();
-                SelectedEntity = null;
+                DeselectPiece();
             }
             else
             {

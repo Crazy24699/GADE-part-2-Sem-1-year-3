@@ -24,7 +24,7 @@ public class BehaviourTree : MonoBehaviour
     // Update is called once per frame
     private void FixedUpdate()
     {
-        if(!StartupRan)
+        if(!StartupRan || !EnemySelfRef.GetComponent<EnemyAI>().ThisPlayerScript.TurnActive)
         {
             return;
         }
