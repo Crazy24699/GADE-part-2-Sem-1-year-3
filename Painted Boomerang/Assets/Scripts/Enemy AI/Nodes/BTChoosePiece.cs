@@ -14,10 +14,13 @@ public class BTChoosePiece : BTNodeBase
     public GameObject SelfRef;
 
     //Bools
+    protected bool InSight = false;
     protected bool HasSelectedPiece = false;
 
-    //Gameobejcts
-    public EntityBase PieceSelected;
+    //Scripts
+    private EntityBase PieceSelected;
+
+    //Floats
 
 
     public BTChoosePiece(GameObject EnemyAIRef)
@@ -30,22 +33,30 @@ public class BTChoosePiece : BTNodeBase
 
     public override NodeStateOptions RunNodeLogicAndStatus()
     {
+        PieceSelected = EnemyAIScript.ChosenPiece;
+        if (PieceSelected == null)
+        {
+            Debug.Log("what");
+        }
+            
         if(PieceSelected == null)
         {
             switch (EnemyAIScript.GameStarted)
             {
                 case true:
                     SelectPiece();
-                    Debug.Log("woop");
+                    
+
                     break;
 
                 case false:
                     int RandomPiece = Random.Range(0, EnemyAIScript.PiecesInPlay.Count);
                     PieceSelected = EnemyAIScript.PiecesInPlay[RandomPiece].GetComponent<EntityBase>();
-                    PieceSelected.gameObject.GetComponent<SpriteRenderer>().color = Color.cyan;
                     EnemyAIScript.ChosenPiece = PieceSelected;
+                    EnemyAIScript.ThisPlayerScript.SelectPiece(PieceSelected.gameObject);
                     EnemyAIScript.PieceSelected = true;
-                    Debug.Log("Noop");
+                    EnemyAIScript.GameStarted = true;
+
                     break;
 
 
@@ -61,37 +72,77 @@ public class BTChoosePiece : BTNodeBase
 
     public void SelectPiece()
     {
+        
         foreach (var Piece in EnemyAIScript.PiecesInPlay)
         {
+            Debug.Log(EnemyAIScript.PiecesInPlay.Count);
+            //Debug.Log("woop");
+            //Debug.Log("Noop");
+
             EntityBase PieceScript = Piece.GetComponent<EntityBase>();
+
             if (PieceScript.CurrentHealth < PieceScript.CurrentHealth / 2)
             {
-
+                Debug.Log("Noop");
                 if (PieceSelected == null || PieceScript.CurrentHealth < PieceSelected.CurrentHealth)
                 {
-                    PieceSelected = PieceScript;
-                    EnemyAIScript.ChosenPiece = PieceSelected;
-                    EnemyAIScript.PieceSelected = true;
-                    return;
+                    UpdatePieceData(PieceScript);
                 }
 
             }
-            else
-            {
 
+            if (PieceScript.CheckLOS() && ProgramManager.ProgramManagerInstance.HardmodeActive)
+            {
+                Debug.Log("woop");
             }
 
-            
+            if (PieceScript.InStartingArea && PieceSelected == null)
+            {
+                UpdatePieceData(PieceScript);
+                Debug.Log("Noop     " + PieceScript.gameObject.name);
+                return;
+            }
+            else if (!PieceScript.InStartingArea && PieceSelected == null) 
+            {
+                int RandomPieceNumber = Random.Range(0, EnemyAIScript.PiecesInPlay.Count);
+                PieceSelected = EnemyAIScript.PiecesInPlay[RandomPieceNumber].GetComponent<EntityBase>();
+                Debug.Log(RandomPieceNumber);
+                //PieceSelected = CheckPieceDistances();
+                Debug.Log("making a sounds");
+                UpdatePieceData(PieceSelected);
+            }
+
+
         }
     }
 
+    
 
-    public void UpdatePieceData()
+    protected EntityBase CheckPieceDistances()
     {
+        float MinPieceDistance = 0.0f;
+        EntityBase BestOption = new EntityBase();
         foreach (var Piece in EnemyAIScript.PiecesInPlay)
         {
-            Piece.GetComponent<EntityBase>().CheckMainCardinalDirections();
+            Piece.GetComponent<EntityBase>().SelectAttackPiece();
+            if (Piece.GetComponent<EntityBase>().EnemyPieceDistance > MinPieceDistance)
+            {
+                BestOption = Piece.GetComponent<EntityBase>();
+                MinPieceDistance = Vector3.Distance(SelfRef.transform.position, Piece.transform.position);
+            }
         }
+
+        return BestOption;
+    }
+
+
+    public void UpdatePieceData(EntityBase PieceScript)
+    {
+        PieceSelected = PieceScript;
+        EnemyAIScript.ChosenPiece = PieceSelected;
+        EnemyAIScript.AIChangePieceState(true);
     }
 
 }
+
+

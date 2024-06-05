@@ -228,7 +228,7 @@ public class WorldHandler : MonoBehaviour
             case Teams.Team1:
                 ObjectRef.GetComponent<SpriteRenderer>().color = Color.green;
                 SpawnedPiece.transform.SetParent(Team1Script.transform);
-                Team1Script.Entities.Add(SpawnedPiece.GetComponent<EntityBase>());
+                Team1Script.OwnPieces.Add(SpawnedPiece.GetComponent<EntityBase>());
                 SpawnedEntity.SetEntityInfo(Team1Script, Color.green, Teams.Team1);
                 Team1Script.CanPerformAction = true;
                 break;
@@ -236,7 +236,7 @@ public class WorldHandler : MonoBehaviour
             case Teams.Team2:
                 ObjectRef.GetComponent<SpriteRenderer>().color = Color.red;
                 SpawnedPiece.transform.SetParent(Team2Script.transform);
-                Team2Script.Entities.Add(SpawnedPiece.GetComponent<EntityBase>());
+                Team2Script.OwnPieces.Add(SpawnedPiece.GetComponent<EntityBase>());
                 SpawnedEntity.SetEntityInfo(Team2Script, Color.red, Teams.Team2);
                 Team2Script.CanPerformAction = true;
                 break;

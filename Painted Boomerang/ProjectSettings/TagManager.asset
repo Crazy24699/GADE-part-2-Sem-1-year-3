@@ -10,6 +10,7 @@ TagManager:
   - Entity
   - Boomerang
   - Powerup
+  - StartingSquare
   layers:
   - Default
   - TransparentFX
@@ -22,8 +23,8 @@ TagManager:
   - Boomerang
   - Constructs
   - Pieces
+  - ActivePiece
   - Cell
-  - 
   - 
   - 
   - 

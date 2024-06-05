@@ -203,12 +203,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c994b0303e8eb734b82d9ddaf1ec5474, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  CanInteract: 0
-  Selected: 0
-  IsMoving: 0
-  CanPerformAction: 1
+  InStartingArea: 0
   CurrentHealth: 0
   MouseDistance: 0
+  DebugHitpoints: {fileID: 5642691001663242805, guid: 3b21efd70db24ce4b861caf6abf4dba1, type: 3}
   CurrentPosition: {x: 0, y: 0}
   SpriteColor: {r: 0, g: 0, b: 0, a: 0}
   HealthBar: {fileID: 2055795969501245369}
@@ -228,6 +226,8 @@ MonoBehaviour:
     AimPoint: {x: 0, y: 0}
     AimDistance: 0
   OffsetDirectionsClas: []
+  EnemyAIScript: {fileID: 0}
+  ClosestEnemyPiece: {fileID: 0}
 --- !u!58 &3331810461701429693
 CircleCollider2D:
   m_ObjectHideFlags: 0

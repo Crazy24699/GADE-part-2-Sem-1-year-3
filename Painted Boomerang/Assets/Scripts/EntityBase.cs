@@ -4,34 +4,37 @@ using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.UI;
 
+
 public class EntityBase : MonoBehaviour
 {
     //Bools
-    public bool CanInteract;
-    public bool Selected;
-    public bool IsMoving = false;
-    public bool CanPerformAction = true;
     private bool AIControlled;
+    public bool InStartingArea;
 
     //Ints
     const int MaxHealth=3;
     public int CurrentHealth;
     public int MouseDistance;
 
+    //Gameobejcts
+    public GameObject DebugHitpoints;
 
     public Vector2Int CurrentPosition;
 
-    public Color SpriteColor;
+    [SerializeField] private Color SpriteColor;
 
     //Scripts
     public Slider HealthBar;
     public Teams AssignedTeam;
     public PlayerFunctionality PlayerScript;
 
-    public List<AimDirections> MainDirectionsClass;
-    public List<AimDirections> OffsetDirectionsClas;
+    public List<AimDirections> MainDirectionsClass = new List<AimDirections>();
+    public List<AimDirections> OffsetDirectionsClas = new List<AimDirections>();
     [SerializeField]protected EnemyAI EnemyAIScript;
+    public List<Vector2> Options = new List<Vector2>();
 
+    public EntityBase ClosestEnemyPiece;
+    public float EnemyPieceDistance;
 
     // Start is called before the first frame update
     void Start()
@@ -47,11 +50,17 @@ public class EntityBase : MonoBehaviour
         HealthBar.maxValue = MaxHealth;
         HealthBar.value = CurrentHealth;
 
+        InStartingArea = true;
+
+        this.gameObject.name = this.gameObject.name + PlayerScript.OwnPieces.Count;
+
         if (AIControlled)
         {
             EnemyAIScript = GameObject.FindObjectOfType<EnemyAI>();
         }
     }
+
+    
 
     // Update is called once per frame
     void Update()
@@ -60,11 +69,33 @@ public class EntityBase : MonoBehaviour
         //MouseDistance = new Vector2Int(Mathf.RoundToInt(Mathf.Abs(MousePosition.x - transform.position.x)), Mathf.RoundToInt(Mathf.Abs(MousePosition.y - transform.position.y)));
         MouseDistance = Mathf.RoundToInt(Mathf.Abs(Vector2.Distance(this.transform.position, MousePosition)));
         HealthBar.value = CurrentHealth ;
+
     }
 
     public void MoveEntity(Vector2Int CellCord)
     {
         this.transform.position = new Vector3(CellCord.x, CellCord.y);
+    }
+
+    //Checks if the current piece in is LOS of the enemy
+    public bool CheckLOS()
+    {
+        
+        return true;
+    }
+
+    public void SelectAttackPiece()
+    {
+        
+        foreach (var Piece in EnemyAIScript.ThisPlayerScript.EnemyPieces)
+        {
+            float Distance = Vector3.Distance(this.transform.position, Piece.transform.position);
+            if (Distance > EnemyPieceDistance)
+            {
+                EnemyPieceDistance = Distance;
+                ClosestEnemyPiece = Piece;
+            }
+        }
     }
 
     public void SetEntityInfo(PlayerFunctionality PlayerScriptRef,Color TeamColour, Teams SetTeam)
@@ -81,7 +112,7 @@ public class EntityBase : MonoBehaviour
         if(CurrentHealth <= 0)
         {
             CurrentHealth = 0;
-            PlayerScript.Entities.Remove(this);
+            PlayerScript.OwnPieces.Remove(this);
             PlayerScript.CheckPieces();
             Destroy(this.gameObject);
         }
@@ -97,13 +128,28 @@ public class EntityBase : MonoBehaviour
     {
         foreach (var AimDirection in MainDirectionsClass)
         {
-            RaycastHit RaycastData;
-            Physics.Raycast(transform.position, AimDirection.Direction, out RaycastData, 100f, EnemyAIScript.InteractableLayers);
-
+            RaycastHit2D RaycastData;
+            RaycastData = Physics2D.Raycast(transform.position, AimDirection.Direction, 100.00f, EnemyAIScript.InteractableLayers);
             AimDirection.AimDistance = RaycastData.distance;
             AimDirection.AimPoint = RaycastData.point;
-
+            //Debug.Log(RaycastData.collider.gameObject.name + "     Devil trigger    " + AimDirection.AimPoint);
+            Instantiate(DebugHitpoints, AimDirection.AimPoint, Quaternion.identity);
         }
+    }
+
+    public void AIMovePiece(Vector2 Direction)
+    {
+        Debug.DrawLine(transform.position, this.transform.position + new Vector3(Direction.x * 4, Direction.y * 4, 0), Color.black);
+        this.transform.position += new Vector3(Direction.x * 4, Direction.y * 4, 0);
+        PlayerScript.MovesRemaining--;
+    }
+
+    private void OnDrawGizmos()
+    {
+       
+
+        Gizmos.color = Color.green;
+        Gizmos.DrawRay(transform.position, MainDirectionsClass[1].Direction*5);
     }
 
     public void CheckOffsetCardinalDirections()
@@ -128,7 +174,12 @@ public class EntityBase : MonoBehaviour
             CellScript.enabled = true;
             CurrentPosition = CellScript.Location;
         }
+        if (Collision.CompareTag("StartingSquare"))
+        {
+            InStartingArea = true;
+        }
     }
+
     private void OnTriggerExit2D(Collider2D Collision)
     {
         if (Collision.CompareTag("Cell"))
@@ -136,6 +187,10 @@ public class EntityBase : MonoBehaviour
             CellFunctionality CellScript;
             Collision.TryGetComponent<CellFunctionality>(out CellScript);
             CellScript.enabled = false;
+        }
+        if (Collision.CompareTag("StartingSquare"))
+        {
+            InStartingArea = false;
         }
     }
 }

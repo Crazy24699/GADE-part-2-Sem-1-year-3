@@ -58,7 +58,7 @@ public class BTAttackNode : BTNodeBase
                 case > 5:
                     AgentRef.isStopped = false;
                     AgentRef.SetDestination(Target.transform.position);
-                    Debug.Log("water dream");
+                    //Debug.Log("water dream");
                     ThrowingLogic();
                     break;
             }
@@ -67,7 +67,7 @@ public class BTAttackNode : BTNodeBase
         }
         else
         {
-            Debug.Log("water dream");
+            //Debug.Log("water dream");
             return NodeStateOptions.Fail;
         }
     }
