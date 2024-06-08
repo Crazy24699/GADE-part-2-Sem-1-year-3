@@ -108,6 +108,8 @@ public class EntityBase : MonoBehaviour
         }
     }
 
+
+
     public void SetRandomAttackPositions()
     {
         int PositionChangeValue = 0;
@@ -244,6 +246,7 @@ public class EntityBase : MonoBehaviour
             InStartingArea = false;
         }
     }
+
 }
 
 

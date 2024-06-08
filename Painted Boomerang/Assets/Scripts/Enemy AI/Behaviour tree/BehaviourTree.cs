@@ -44,8 +44,8 @@ public class BehaviourTree : MonoBehaviour
         BTNodeSequence AttackEnemySequence = new BTNodeSequence();
 
         DeathSequence.SetSequenceValues(new List<BTNodeBase> { DieNode });
-        AttackEnemySequence.SetSequenceValues(new List<BTNodeBase> { AttackEnemyNode });
         ChooseMoveSequence.SetSequenceValues(new List<BTNodeBase> { ChoosePieceNode, ChoiceNode });
+        AttackEnemySequence.SetSequenceValues(new List<BTNodeBase> { AttackEnemyNode });
 
         RootNode = new BTNodeSelector(new List<BTNodeBase> { DeathSequence, ChooseMoveSequence, AttackEnemySequence });
 

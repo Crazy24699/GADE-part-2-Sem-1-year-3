@@ -16,4 +16,9 @@ public class MainMenu : MonoBehaviour
         Application.Quit();
     }
 
+    public void LoadPlayerLevel(string LoadLevel)
+    {
+        SceneManager.LoadScene(LoadLevel);
+    }
+
 }

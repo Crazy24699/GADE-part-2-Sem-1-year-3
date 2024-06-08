@@ -162,19 +162,13 @@ public class BTChoice : BTNodeBase
         {
             return false;
         }
-        //foreach (var DirectionValue in EnemyAIScript.ChosenPiece.MainDirectionsClass)
-        //{
-        //    if (EnemyAIScript.ChosenPiece.BadTags.Contains(DirectionValue.ObejctTag))
-        //    {
-        //        return false;
-        //    }
-        //}
+
         return true;
     }
 
     protected void ChooseAction()
     {
-        Debug.Log("shink shink boom boom");
+        //Debug.Log("shink shink boom boom");
         if ((EnemyAIScript.LowHealthPiece && InSight) || Retreating)
         {
             
@@ -182,7 +176,7 @@ public class BTChoice : BTNodeBase
         }
         if(!Retreating)
         {
-            Debug.Log("Ive unlocked it ");
+            //Debug.Log("Ive unlocked it ");
             if(!CheckedDirections)
             {
                 EnemyAIScript.ChosenPiece.CheckMainCardinalDirections();
@@ -191,6 +185,8 @@ public class BTChoice : BTNodeBase
         }
         
     }
+
+    
 
     public void AttackAction()
     {
