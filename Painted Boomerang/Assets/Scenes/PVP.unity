@@ -893,6 +893,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8a537d152068b154b9ac2d5507f3ff94, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  SelectedEntity: {fileID: 0}
   BoomerangObject: {fileID: 6648229833626570824, guid: e9b1c06cadb25cb4a8beeb3a5dc76a5b, type: 3}
   MovesRemaining: 0
   CellCursorLocation: {x: 0, y: 0}
@@ -908,7 +909,8 @@ MonoBehaviour:
   InstantBreak: 0
   AIControlled: 0
   StartupRan: 0
-  Entities: []
+  OwnPieces: []
+  EnemyPieces: []
   ThisTeam: 1
   WorldHandlerScript: {fileID: 0}
   BoomerangIcon: {fileID: 8937828928543727559, guid: 29e9541b061fdce4eb500cfddfa33601, type: 3}
@@ -1873,6 +1875,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 864319816}
+  - component: {fileID: 864319817}
   m_Layer: 0
   m_Name: Game Manager
   m_TagString: Untagged
@@ -1895,6 +1898,22 @@ Transform:
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &864319817
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 864319814}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4c9f574d96cd5a748bc40eab885a0c97, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  GameStarted: 0
+  HardmodeActive: 0
+  ChosenDifficulty: 0
+  CellSize: 0
 --- !u!1 &952389289
 GameObject:
   m_ObjectHideFlags: 0
@@ -2974,6 +2993,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8a537d152068b154b9ac2d5507f3ff94, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  SelectedEntity: {fileID: 0}
   BoomerangObject: {fileID: 6648229833626570824, guid: e9b1c06cadb25cb4a8beeb3a5dc76a5b, type: 3}
   MovesRemaining: 2
   CellCursorLocation: {x: 0, y: 0}
@@ -2989,7 +3009,8 @@ MonoBehaviour:
   InstantBreak: 0
   AIControlled: 0
   StartupRan: 0
-  Entities: []
+  OwnPieces: []
+  EnemyPieces: []
   ThisTeam: 0
   WorldHandlerScript: {fileID: 0}
   BoomerangIcon: {fileID: 8937828928543727559, guid: 29e9541b061fdce4eb500cfddfa33601, type: 3}

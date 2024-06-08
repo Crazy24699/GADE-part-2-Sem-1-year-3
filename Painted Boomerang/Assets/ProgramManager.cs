@@ -29,8 +29,9 @@ public class ProgramManager : MonoBehaviour
         else
         {
             ProgramManagerInstance = this;
+            DontDestroyOnLoad(this.gameObject);
         }
-
+        
 
 
     }
@@ -39,5 +40,19 @@ public class ProgramManager : MonoBehaviour
     void Update()
     {
         
+    }
+
+    public void SetDifficulty(int Difficulty)
+    {
+        switch (Difficulty)
+        {
+            case 0:
+                ChosenDifficulty = DifficultyOptions.Easy;
+                break;
+
+            case 1:
+                ChosenDifficulty = DifficultyOptions.Hard;
+                break;
+        }
     }
 }

@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.AI;
 
@@ -9,7 +10,7 @@ public class BTChoosePiece : BTNodeBase
     public WorldHandler WorldHandlerScript;
     public NavMeshAgent AgentRef;
 
-    //GameObj
+    //GameObjects
     public GameObject Target;
     public GameObject SelfRef;
 
@@ -38,52 +39,88 @@ public class BTChoosePiece : BTNodeBase
         {
             //Debug.Log("what");
         }
-            
-        if(PieceSelected == null && EnemyAIScript.ThisPlayerScript)
+
+        if (PieceSelected == null && EnemyAIScript.ThisPlayerScript && EnemyAIScript.GameStarted)
         {
-            switch (EnemyAIScript.GameStarted)
+            switch (ProgramManager.ProgramManagerInstance.ChosenDifficulty)
             {
-                case true:
+               
+                default:
+                case ProgramManager.DifficultyOptions.Easy:
                     SelectPiece();
+                    break;
+                
+                
+                case ProgramManager.DifficultyOptions.Hard:
+                    AdvancedPieceSelection();
+                    break;
                     
-
-                    break;
-
-                case false:
-                    int RandomPiece = Random.Range(0, EnemyAIScript.PiecesInPlay.Count);
-                    PieceSelected = EnemyAIScript.PiecesInPlay[RandomPiece].GetComponent<EntityBase>();
-                    EnemyAIScript.ChosenPiece = PieceSelected;
-                    EnemyAIScript.ThisPlayerScript.SelectPiece(PieceSelected.gameObject);
-                    EnemyAIScript.PieceSelected = true;
-                    EnemyAIScript.GameStarted = true;
-
-                    break;
-
-
             }
+            return NodeStateOptions.Running;
+        }
+        else if (!EnemyAIScript.GameStarted)
+        {
+            SelectRandomPiece();
             return NodeStateOptions.Pass;
         }
+
+
+        //if(PieceSelected == null && EnemyAIScript.ThisPlayerScript)
+        //{
+        //    switch (EnemyAIScript.GameStarted)
+        //    {
+        //        case true:
+        //            SelectPiece();
+
+        //            break;
+
+        //        case false:
+        //            SelectRandomPiece();
+
+        //            break;
+
+
+        //    }
+        //    return NodeStateOptions.Pass;
+        //}
         
         
         return NodeStateOptions.Fail;
     }
 
-    
+
+
+    public void SelectRandomPiece()
+    {
+        int RandomPiece = Random.Range(0, EnemyAIScript.PiecesInPlay.Count);
+        PieceSelected = EnemyAIScript.PiecesInPlay[RandomPiece].GetComponent<EntityBase>();
+
+        EnemyAIScript.ChosenPiece = PieceSelected;
+        EnemyAIScript.ThisPlayerScript.SelectPiece(PieceSelected.gameObject);
+
+        EnemyAIScript.PieceSelected = true;
+        EnemyAIScript.GameStarted = true;
+    }
+
+    protected void AdvancedPieceSelection()
+    {
+        EntityBase ChosenPiece;
+        ChosenPiece = CheckPieceDistances();
+
+
+    }
 
     public void SelectPiece()
     {
         
         foreach (var Piece in EnemyAIScript.PiecesInPlay)
         {
-            //Debug.Log(EnemyAIScript.PiecesInPlay.Count);
-            //Debug.Log("woop");
-            //Debug.Log("Noop");
 
             EntityBase PieceScript = Piece.GetComponent<EntityBase>();
 
             if (PieceScript.CurrentHealth < PieceScript.CurrentHealth / 2)
             {
-                Debug.Log("Noop");
+                //Debug.Log("Noop");
                 if (PieceSelected == null || PieceScript.CurrentHealth < PieceSelected.CurrentHealth)
                 {
                     UpdatePieceData(PieceScript);
@@ -93,7 +130,7 @@ public class BTChoosePiece : BTNodeBase
 
             if (PieceScript.CheckLOS() && ProgramManager.ProgramManagerInstance.HardmodeActive)
             {
-                Debug.Log("woop");
+                //Debug.Log("woop");
             }
 
             if (PieceScript.InStartingArea && PieceSelected == null)
@@ -135,6 +172,10 @@ public class BTChoosePiece : BTNodeBase
         return BestOption;
     }
 
+    protected void ChechPieceDanger()
+    {
+
+    }
 
     public void UpdatePieceData(EntityBase PieceScript)
     {
