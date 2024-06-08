@@ -73,10 +73,10 @@ public class PlayerFunctionality : MonoBehaviour
     public void TurnStart()
     {
         WorldHandlerScript.ActivatedCell.transform.position = ActiveCellLocation;
-        Debug.Log("Went");
+        //Debug.Log("Went");
         foreach (EntityBase Entity in OwnPieces)
         {
-            Debug.Log("Active");
+            //Debug.Log("Active");
             Entity.gameObject.GetComponent<Collider2D>().excludeLayers = ExclusionLayers;
         }
     }
@@ -152,7 +152,7 @@ public class PlayerFunctionality : MonoBehaviour
 
             if(SelectedEntity != null && SelectedEntity.GetComponent<EntityBase>().MouseDistance>=8)
             {
-                ThrowBoomerang(RayHit);
+                ThrowBoomerang(RayHit.point);
                 CanPerformAction = false;
             }
         }
@@ -227,11 +227,11 @@ public class PlayerFunctionality : MonoBehaviour
         }
     }
 
-    public void ThrowBoomerang(RaycastHit2D RayHitRef)
+    public void ThrowBoomerang(Vector2 AimPoint)
     {
         Debug.Log("share the truth");
 
-        Vector2 MoveDirection = (RayHitRef.point - new Vector2(SelectedEntity.transform.position.x, SelectedEntity.transform.position.y)).normalized;
+        Vector2 MoveDirection = (AimPoint - new Vector2(SelectedEntity.transform.position.x, SelectedEntity.transform.position.y)).normalized;
         GameObject SpawnedBoomerang= Instantiate(BoomerangObject, SelectedEntity.transform.position, SelectedEntity.transform.rotation);
         SpawnedBoomerang.GetComponent<Rigidbody2D>().velocity = MoveDirection*25;
         BoomerangFunctionality BoomerangeScriptRef=SpawnedBoomerang.GetComponent<BoomerangFunctionality>();

@@ -1,4 +1,3 @@
-using System.Collections;
 using System.Collections.Generic;
 using Unity.VisualScripting;
 using UnityEngine;
@@ -27,6 +26,8 @@ public class EnemyAI : MonoBehaviour
     public bool GameStarted = false;
     public bool PieceSelected;
     public bool LowHealthPiece;
+    public bool AttackingActive;
+    public bool CanPerformMove;
 
     //Floats
     protected float TimerLength = 2.5f;
@@ -57,8 +58,11 @@ public class EnemyAI : MonoBehaviour
         {
             return;
         }
-        DrawBouncingRay(ChosenPiece.transform.position, Direcitonal, 3);
+        CanPerformMove = ThisPlayerScript.CanPerformAction;
+        
+        //DrawBouncingRay(ChosenPiece.transform.position, Direcitonal, 3);
     }
+
 
     void DrawBouncingRay(Vector2 origin, Vector2 direction, int remainingBounces)
     {
@@ -120,6 +124,8 @@ public class EnemyAI : MonoBehaviour
                 break;
         }
     }
+
+
 
     public List<GameObject> GetAllPieces()
     {

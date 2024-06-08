@@ -897,7 +897,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   Direcitonal: {x: 0, y: 0}
   PiecesInPlay: []
-  BoomerangRef: {fileID: 0}
+  BoomerangRef: {fileID: 6648229833626570824, guid: e9b1c06cadb25cb4a8beeb3a5dc76a5b, type: 3}
   BehaviourTreeScript: {fileID: 0}
   AssignedTeam: 0
   InteractableLayers:
@@ -910,6 +910,8 @@ MonoBehaviour:
   GameStarted: 0
   PieceSelected: 0
   LowHealthPiece: 0
+  AttackingActive: 0
+  CanPerformMove: 0
 --- !u!114 &355600634
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -923,7 +925,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   SelectedEntity: {fileID: 0}
-  BoomerangObject: {fileID: 0}
+  BoomerangObject: {fileID: 6648229833626570824, guid: e9b1c06cadb25cb4a8beeb3a5dc76a5b, type: 3}
   MovesRemaining: 0
   CellCursorLocation: {x: 0, y: 0}
   ActiveCellLocation: {x: 24, y: 0}

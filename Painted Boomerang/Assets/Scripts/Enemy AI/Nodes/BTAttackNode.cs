@@ -9,12 +9,12 @@ public class BTAttackNode : BTNodeBase
 {
     public EnemyAI EnemyAIScript;
     public WorldHandler WorldHandlerScript;
-    public NavMeshAgent AgentRef;
 
     public float Distance;
-    protected float MissChange = 3.5f;
+    protected float MissChance = 3.5f;
 
     protected bool CanAttack=false;
+    protected bool AimPointsUpdated = false;
 
     public Vector3 Direciton;
 
@@ -37,6 +37,26 @@ public class BTAttackNode : BTNodeBase
     public override NodeStateOptions RunNodeLogicAndStatus()
     {
 
+        if (!EnemyAIScript.AttackingActive)
+        {
+            return NodeStateOptions.Fail;
+        }
+
+        if(!AimPointsUpdated)
+        {
+            GetAimPoints();
+        }
+
+        if (EnemyAIScript.ThisPlayerScript.TurnActive && EnemyAIScript.ThisPlayerScript.MovesRemaining <= 0) 
+        {
+            AimPointsUpdated = false;
+            return NodeStateOptions.Fail;
+        }
+
+        if(AimPointsUpdated && CanAttack && EnemyAIScript.AttackingActive)
+        {
+            ThrowingLogic();
+        }
         if (Distance >= 2 && CanAttack) 
         {
             Debug.Log("evil roams");
@@ -47,17 +67,14 @@ public class BTAttackNode : BTNodeBase
         else if(EnemyAIScript.EnemyInRange && CanAttack) 
         {
             Debug.Log("Oh");
-            switch (MissChange)         //Change this, its a placeholder
+            switch (MissChance)         //Change this, its a placeholder
             {
                 case <=5:
-                    AgentRef.isStopped = true;
                     ThrowingLogic();
                     Debug.Log("red");
                     break;
 
                 case > 5:
-                    AgentRef.isStopped = false;
-                    AgentRef.SetDestination(Target.transform.position);
                     //Debug.Log("water dream");
                     ThrowingLogic();
                     break;
@@ -72,12 +89,23 @@ public class BTAttackNode : BTNodeBase
         }
     }
 
+    protected void GetAimPoints()
+    {
+        EnemyAIScript.ChosenPiece.SetRandomAttackPositions();
+        int RandomAttackOption = Random.Range(0, EnemyAIScript.ChosenPiece.AttackPointOptions.Count);
+        AttackOptions AttackOptionsClass = EnemyAIScript.ChosenPiece.AttackPointOptions[RandomAttackOption];
+        Vector2 AimPosition = new Vector2(AttackOptionsClass.XPosition, AttackOptionsClass.YPosition);
+        AimingPoint = AimPosition;
+
+        AimPointsUpdated = true;
+        CanAttack = true;
+    }
 
     protected void ThrowingLogic()
     {
         if (EnemyAIScript.CanThrow && EnemyAIScript.EnemyInRange)
         {
-            float MissOffset = Random.Range(MissChange * -1, MissChange);
+            float MissOffset = Random.Range(MissChance * -1, MissChance);
 
             int MissOffsetAxis = Random.Range(0, 3);
             Vector2 ChangeVector = Vector2.zero;
@@ -98,6 +126,10 @@ public class BTAttackNode : BTNodeBase
 
             AimingPoint += ChangeVector;
         }
+        EnemyAIScript.ThisPlayerScript.ThrowBoomerang(AimingPoint);
+        EnemyAIScript.AttackingActive = false;
+        EnemyAIScript.ThisPlayerScript.CanPerformAction = false;
+        CanAttack = false;
     }
 
 
