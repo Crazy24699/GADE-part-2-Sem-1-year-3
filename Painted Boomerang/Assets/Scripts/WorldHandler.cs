@@ -152,6 +152,18 @@ public class WorldHandler : MonoBehaviour
         
     }
 
+    private void Update()
+    {
+        if (Input.GetKeyDown(KeyCode.D))
+        {
+            GameObject[] triangles = GameObject.FindGameObjectsWithTag("Triangle");
+            foreach (var Tri in triangles)
+            {
+                Destroy(Tri);
+            }
+        }
+    }
+
     public void EndGame(Teams LostTeam)
     {
         EndGamePanel.SetActive(true) ;
@@ -248,7 +260,7 @@ public class WorldHandler : MonoBehaviour
 
     public void SetActivePlayer(Teams ActiveTeam)
     {
-        Debug.Log(ActiveTeam);
+        //Debug.Log(ActiveTeam);
         switch (ActiveTeam)
         {
             case Teams.Team2:

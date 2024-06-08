@@ -36,10 +36,10 @@ public class BTChoosePiece : BTNodeBase
         PieceSelected = EnemyAIScript.ChosenPiece;
         if (PieceSelected == null)
         {
-            Debug.Log("what");
+            //Debug.Log("what");
         }
             
-        if(PieceSelected == null)
+        if(PieceSelected == null && EnemyAIScript.ThisPlayerScript)
         {
             switch (EnemyAIScript.GameStarted)
             {
@@ -75,7 +75,7 @@ public class BTChoosePiece : BTNodeBase
         
         foreach (var Piece in EnemyAIScript.PiecesInPlay)
         {
-            Debug.Log(EnemyAIScript.PiecesInPlay.Count);
+            //Debug.Log(EnemyAIScript.PiecesInPlay.Count);
             //Debug.Log("woop");
             //Debug.Log("Noop");
 
@@ -99,7 +99,7 @@ public class BTChoosePiece : BTNodeBase
             if (PieceScript.InStartingArea && PieceSelected == null)
             {
                 UpdatePieceData(PieceScript);
-                Debug.Log("Noop     " + PieceScript.gameObject.name);
+                //Debug.Log("Noop     " + PieceScript.gameObject.name);
                 return;
             }
             else if (!PieceScript.InStartingArea && PieceSelected == null) 

@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.AI;
+using static UnityEngine.RuleTile.TilingRuleOutput;
 
 public class BTChoice : BTNodeBase
 {
@@ -15,6 +16,7 @@ public class BTChoice : BTNodeBase
     protected EntityBase ChosenPieceRef;
 
     private int RandomAction;
+    private int MoveOptionsNum = 0;
 
     //Vectors
     protected Vector2 CoverDestination;
@@ -50,7 +52,6 @@ public class BTChoice : BTNodeBase
 
     public override NodeStateOptions RunNodeLogicAndStatus()
     {
-
         if(!EnemyAIScript.ThisPlayerScript.TurnActive)
         {
             return NodeStateOptions.Fail;
@@ -78,26 +79,32 @@ public class BTChoice : BTNodeBase
             if (CurrentDelayTime > 0)
             {
                 CurrentDelayTime -= Time.deltaTime;
-                Debug.Log("The weight of the world      "+CurrentDelayTime);
+                //Debug.Log("The weight of the world      "+CurrentDelayTime);
                 return NodeStateOptions.Running;
             }
             #endregion
 
             if (!ActionChosen)
             {
-                RandomAction = Random.Range(0, 1);
+                RandomAction = Random.Range(0, 2);
                 ActionChosen = true;
             }
 
 
             #region Moves the current selected Piece
-            if (MovingPiece && CurrentDelayTime <= 0 && RandomAction == 0)  
+            if (CurrentDelayTime <= 0 && RandomAction == 0 && EnemyAIScript.ThisPlayerScript.CanPerformAction)   
             {
                 MoveAction();
                 return NodeStateOptions.Pass;
             }
             #endregion
 
+            if(CurrentDelayTime<=0 && RandomAction == 1 && EnemyAIScript.CanPerformMove)
+            {
+                AttackAction();
+                RandomAction = 0;
+                return NodeStateOptions.Pass;
+            }
 
 
             return NodeStateOptions.Pass;
@@ -128,15 +135,41 @@ public class BTChoice : BTNodeBase
 
     protected void UpdateMoveOptions()
     {
+        if (EnemyAIScript.ChosenPiece.UpdatedMovepoints)
+        {
+            return;
+        }
+        Debug.Log("welcome to paradise");
         MoveOptions.Clear();
         foreach (var Direction in EnemyAIScript.ChosenPiece.MainDirectionsClass)
         {
-            if (Direction.AimDistance > 4)
+            if (Direction.AimDistance > 4 && TagCompareList(Direction.ObejctTag))
             {
                 MoveOptions.Add(Direction.Direction);
+                
             }
         }
+        MoveOptionsNum = MoveOptions.Count;
         ChosenPieceRef.Options = MoveOptions;
+        EnemyAIScript.ChosenPiece.UpdatedMovepoints = true;
+        
+    }
+
+    protected bool TagCompareList(string ObejctTag)
+    {
+
+        if (EnemyAIScript.ChosenPiece.BadTags.Contains(ObejctTag))
+        {
+            return false;
+        }
+        //foreach (var DirectionValue in EnemyAIScript.ChosenPiece.MainDirectionsClass)
+        //{
+        //    if (EnemyAIScript.ChosenPiece.BadTags.Contains(DirectionValue.ObejctTag))
+        //    {
+        //        return false;
+        //    }
+        //}
+        return true;
     }
 
     protected void ChooseAction()
@@ -156,48 +189,44 @@ public class BTChoice : BTNodeBase
                 CheckedDirections = true;
             }
         }
-
-        if (!EnemyAIScript.ChosenPiece.InStartingArea && !DirectionChosen)
-        {
-           
-            switch (RandomAction)
-            {
-                case 0:
-
-                    break;
-
-                case 1:
-                    break;
-            }
-
-            //MovingPiece = true;
-        }
-        
-
-        if(!DirectionChosen)
-        {
-
-            MovingPiece = true;
-        }
         
     }
 
     public void AttackAction()
     {
+        EnemyAIScript.AttackingActive = true;
+
+        if (EnemyAIScript.ThisPlayerScript.SelectedEntity == null && EnemyAIScript.CanPerformMove && CurrentDelayTime <= 0) 
+        {
+            Debug.Log("hellish verses");
+            EnemyAIScript.AIChangePieceState(false);
+        }
+        CurrentDelayTime = ChoiceDelayTime;
+        NextDecisionDelayTime = NextDecisionDelay;
+        ResetChoiceState();
 
     }
+
 
     private void MoveAction()
     {
         CurrentDelayTime = 0.0f;
         UpdateMoveOptions();
 
+        Debug.Log(MoveOptionsNum);
+        if (MoveOptions.Count == 0)
+        {
+            RandomAction = 1;
+            Debug.Log("Change Action");
+            return;
+        }
+
         int MoveDirection = Random.Range(0, MoveOptions.Count);
+
         ChosenPieceRef.AIMovePiece(MoveOptions[MoveDirection]);
         EnemyAIScript.AIChangePieceState(false);
 
         DirectionChosen = true;
-        MovingPiece = false;
 
         CurrentDelayTime = ChoiceDelayTime;
         NextDecisionDelayTime = NextDecisionDelay;
@@ -211,6 +240,7 @@ public class BTChoice : BTNodeBase
         Retreating = false;
         InSight = false;
         DirectionChosen = false;
+        ActionChosen = false;
     }
 
     protected void CheckCollidingObjects()

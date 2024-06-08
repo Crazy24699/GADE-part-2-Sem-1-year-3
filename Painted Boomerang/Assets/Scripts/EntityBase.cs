@@ -1,6 +1,8 @@
 using System.Collections;
 using System.Collections.Generic;
+using System.Xml.Linq;
 using Unity.VisualScripting;
+using UnityEditor;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -10,6 +12,7 @@ public class EntityBase : MonoBehaviour
     //Bools
     private bool AIControlled;
     public bool InStartingArea;
+    public bool UpdatedMovepoints;
 
     //Ints
     const int MaxHealth=3;
@@ -20,21 +23,26 @@ public class EntityBase : MonoBehaviour
     public GameObject DebugHitpoints;
 
     public Vector2Int CurrentPosition;
+    public List<Vector2> Options = new List<Vector2>();
+
 
     [SerializeField] private Color SpriteColor;
 
     //Scripts
-    public Slider HealthBar;
+    public UnityEngine.UI.Slider HealthBar;
     public Teams AssignedTeam;
     public PlayerFunctionality PlayerScript;
+    [SerializeField] protected EnemyAI EnemyAIScript;
+
 
     public List<AimDirections> MainDirectionsClass = new List<AimDirections>();
     public List<AimDirections> OffsetDirectionsClas = new List<AimDirections>();
-    [SerializeField]protected EnemyAI EnemyAIScript;
-    public List<Vector2> Options = new List<Vector2>();
-
-    public EntityBase ClosestEnemyPiece;
+    public List<AttackOptions> AttackPointOptions = new List<AttackOptions>();
+    
     public float EnemyPieceDistance;
+
+    public List<string> BadTags= new List<string>();
+
 
     // Start is called before the first frame update
     void Start()
@@ -70,6 +78,7 @@ public class EntityBase : MonoBehaviour
         MouseDistance = Mathf.RoundToInt(Mathf.Abs(Vector2.Distance(this.transform.position, MousePosition)));
         HealthBar.value = CurrentHealth ;
 
+
     }
 
     public void MoveEntity(Vector2Int CellCord)
@@ -84,6 +93,8 @@ public class EntityBase : MonoBehaviour
         return true;
     }
 
+    
+
     public void SelectAttackPiece()
     {
         
@@ -93,8 +104,51 @@ public class EntityBase : MonoBehaviour
             if (Distance > EnemyPieceDistance)
             {
                 EnemyPieceDistance = Distance;
-                ClosestEnemyPiece = Piece;
             }
+        }
+    }
+
+    public void SetRandomAttackPositions()
+    {
+        int PositionChangeValue = 0;
+        for (int i = 0; i < 3; )
+        {
+            int RandomSide = Random.Range(0, 2);
+            switch (RandomSide)
+            {
+                case 0:
+                    PositionChangeValue = -1;
+                    break;
+
+                default:
+                case 1:
+                    PositionChangeValue = 1;
+                    break;
+            }
+
+            if (AttackPointOptions.Count == 0 || AttackPointOptions.Count < 3) 
+            {
+                AttackPointOptions.Add(new AttackOptions());
+
+                
+            }
+
+            if (AttackPointOptions.Count <= 3) 
+            {
+                AttackPointOptions[i].XPosition = Random.Range(1 * PositionChangeValue, 7 * PositionChangeValue);
+                AttackPointOptions[i].YPosition = Random.Range(1 * PositionChangeValue, 7 * PositionChangeValue);
+            }
+            Debug.Log(i + "     Love bites   " + AttackPointOptions.Count);
+            //Debug.Log(AttackPointOptions.Count + "        " + i);
+            if (AttackPointOptions.Count<i)
+            {
+                
+                
+            }
+
+            i++;
+
+
         }
     }
 
@@ -113,6 +167,7 @@ public class EntityBase : MonoBehaviour
         {
             CurrentHealth = 0;
             PlayerScript.OwnPieces.Remove(this);
+            PlayerScript.EnemyPieces.Remove(this);
             PlayerScript.CheckPieces();
             Destroy(this.gameObject);
         }
@@ -132,8 +187,9 @@ public class EntityBase : MonoBehaviour
             RaycastData = Physics2D.Raycast(transform.position, AimDirection.Direction, 100.00f, EnemyAIScript.InteractableLayers);
             AimDirection.AimDistance = RaycastData.distance;
             AimDirection.AimPoint = RaycastData.point;
+            AimDirection.ObejctTag = RaycastData.collider.gameObject.tag;
             //Debug.Log(RaycastData.collider.gameObject.name + "     Devil trigger    " + AimDirection.AimPoint);
-            Instantiate(DebugHitpoints, AimDirection.AimPoint, Quaternion.identity);
+            //Instantiate(DebugHitpoints, AimDirection.AimPoint, Quaternion.identity);
         }
     }
 
@@ -142,14 +198,9 @@ public class EntityBase : MonoBehaviour
         Debug.DrawLine(transform.position, this.transform.position + new Vector3(Direction.x * 4, Direction.y * 4, 0), Color.black);
         this.transform.position += new Vector3(Direction.x * 4, Direction.y * 4, 0);
         PlayerScript.MovesRemaining--;
-    }
-
-    private void OnDrawGizmos()
-    {
-       
-
-        Gizmos.color = Color.green;
-        Gizmos.DrawRay(transform.position, MainDirectionsClass[1].Direction*5);
+        UpdatedMovepoints = false;
+        Options.Clear();
+        //Debug.Log("Moved");
     }
 
     public void CheckOffsetCardinalDirections()
@@ -203,4 +254,15 @@ public class AimDirections
     public Vector2 AimPoint;
 
     public float AimDistance;
+
+    public string ObejctTag;
+}
+
+[System.Serializable]
+public class AttackOptions
+{
+    public float XPosition = 0;
+    public float YPosition = 0;
+
+
 }

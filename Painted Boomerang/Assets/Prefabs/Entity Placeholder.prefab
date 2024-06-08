@@ -204,30 +204,41 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   InStartingArea: 0
+  UpdatedMovepoints: 0
   CurrentHealth: 0
   MouseDistance: 0
   DebugHitpoints: {fileID: 5642691001663242805, guid: 3b21efd70db24ce4b861caf6abf4dba1, type: 3}
   CurrentPosition: {x: 0, y: 0}
+  Options: []
   SpriteColor: {r: 0, g: 0, b: 0, a: 0}
   HealthBar: {fileID: 2055795969501245369}
   AssignedTeam: 0
   PlayerScript: {fileID: 0}
+  EnemyAIScript: {fileID: 0}
   MainDirectionsClass:
   - Direction: {x: 1, y: 0}
     AimPoint: {x: 0, y: 0}
     AimDistance: 0
+    ObejctTag: 
   - Direction: {x: 0, y: 1}
     AimPoint: {x: 0, y: 0}
     AimDistance: 0
+    ObejctTag: 
   - Direction: {x: -1, y: 0}
     AimPoint: {x: 0, y: 0}
     AimDistance: 0
+    ObejctTag: 
   - Direction: {x: 0, y: -1}
     AimPoint: {x: 0, y: 0}
     AimDistance: 0
+    ObejctTag: 
   OffsetDirectionsClas: []
-  EnemyAIScript: {fileID: 0}
-  ClosestEnemyPiece: {fileID: 0}
+  AttackPointOptions: []
+  EnemyPieceDistance: 0
+  BadTags:
+  - Entity
+  - BreakWall
+  - BoundryWall
 --- !u!58 &3331810461701429693
 CircleCollider2D:
   m_ObjectHideFlags: 0
