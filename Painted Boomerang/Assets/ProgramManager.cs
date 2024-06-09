@@ -1,3 +1,4 @@
+using JetBrains.Annotations;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -8,7 +9,6 @@ public class ProgramManager : MonoBehaviour
     public bool GameStarted = false;
 
     public int CellSize;
-
 
 
     void Start()
@@ -24,7 +24,6 @@ public class ProgramManager : MonoBehaviour
         }
 
 
-
     }
 
     // Update is called once per frame
@@ -32,4 +31,6 @@ public class ProgramManager : MonoBehaviour
     {
         
     }
+
+    
 }
