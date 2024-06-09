@@ -194,7 +194,6 @@ public class BTChoice : BTNodeBase
 
         if (EnemyAIScript.ThisPlayerScript.SelectedEntity == null && EnemyAIScript.CanPerformMove && CurrentDelayTime <= 0) 
         {
-            Debug.Log("hellish verses");
             EnemyAIScript.AIChangePieceState(false);
         }
         CurrentDelayTime = ChoiceDelayTime;
@@ -202,6 +201,7 @@ public class BTChoice : BTNodeBase
         ResetChoiceState();
 
     }
+
 
 
     private void MoveAction()

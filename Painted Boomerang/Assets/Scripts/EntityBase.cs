@@ -18,10 +18,13 @@ public class EntityBase : MonoBehaviour
     const int MaxHealth=3;
     public int CurrentHealth;
     public int MouseDistance;
+    public int MovesDoneSinceRefresh;
 
     //Gameobejcts
     public GameObject DebugHitpoints;
+    public GameObject ChosenDestination;
 
+    //Vectors
     public Vector2Int CurrentPosition;
     public List<Vector2> Options = new List<Vector2>();
 
@@ -33,10 +36,10 @@ public class EntityBase : MonoBehaviour
     public Teams AssignedTeam;
     public PlayerFunctionality PlayerScript;
     [SerializeField] protected EnemyAI EnemyAIScript;
-
+    [SerializeField] protected EntityBase TargetPiece;
+    public WayPoint LastWaypoint;
 
     public List<AimDirections> MainDirectionsClass = new List<AimDirections>();
-    public List<AimDirections> OffsetDirectionsClas = new List<AimDirections>();
     public List<AttackOptions> AttackPointOptions = new List<AttackOptions>();
     
     public float EnemyPieceDistance;
@@ -68,7 +71,60 @@ public class EntityBase : MonoBehaviour
         }
     }
 
-    
+    public void ChooseDestination()
+    {
+        if (ChosenDestination == null || InStartingArea)
+        {
+            WayPoint[] WaypointPositions = GameObject.FindObjectsOfType<WayPoint>();
+            float BestWaypointDistance = 0.0f;
+            GameObject WaypointDestination = new GameObject();
+
+            for (int i = 0; i < 5; i++)
+            {
+                float CurrentPointDistance = Vector2.Distance(WaypointPositions[i].gameObject.transform.position, transform.position);
+                if (CurrentPointDistance < BestWaypointDistance)
+                {
+                    WaypointDestination = WaypointPositions[i].gameObject;
+                }
+            }
+
+            ChosenDestination = WaypointDestination;
+        }
+        else if(ChosenDestination != null)
+        {
+            WayPoint CollidedPointScript = ChosenDestination.GetComponent<WayPoint>();
+            
+            ChosenDestination = CollidedPointScript.AddedConnections[0].ConnectionPoint;
+        }
+
+    }
+
+    public void CheckRoutes()
+    {
+
+    }
+
+    protected void ProcessPossibleMoves()
+    {
+        if (ChosenDestination == null)
+        {
+            return;
+        }
+
+
+        float XDifference = Mathf.Abs(transform.position.x - ChosenDestination.transform.position.x);
+        float YDifference = Mathf.Abs(transform.position.y - ChosenDestination.transform.position.y);
+
+        bool ChangeYLocation = YDifference > XDifference;
+        bool YAxisInLine = transform.position.y == ChosenDestination.transform.position.y;
+
+        if(ChangeYLocation && !YAxisInLine)
+        {
+            CheckMainCardinalDirections();
+            //AimDirections[] AvaliableMoves=
+        }
+
+    }
 
     // Update is called once per frame
     void Update()
@@ -104,6 +160,7 @@ public class EntityBase : MonoBehaviour
             if (Distance > EnemyPieceDistance)
             {
                 EnemyPieceDistance = Distance;
+                TargetPiece = Piece;
             }
         }
     }
@@ -201,22 +258,10 @@ public class EntityBase : MonoBehaviour
         this.transform.position += new Vector3(Direction.x * 4, Direction.y * 4, 0);
         PlayerScript.MovesRemaining--;
         UpdatedMovepoints = false;
-        Options.Clear();
+        //Options.Clear();
         //Debug.Log("Moved");
     }
 
-    public void CheckOffsetCardinalDirections()
-    {
-        foreach (var AimDirection in OffsetDirectionsClas)
-        {
-            
-            RaycastHit2D RaycastData;
-            RaycastData = Physics2D.Raycast(transform.position, AimDirection.Direction, 100, EnemyAIScript.InteractableLayers);
-
-            AimDirection.AimDistance = RaycastData.distance;
-            AimDirection.AimPoint = RaycastData.point;
-        }
-    }
 
     private void OnTriggerEnter2D(Collider2D Collision)
     {
@@ -231,6 +276,28 @@ public class EntityBase : MonoBehaviour
         {
             InStartingArea = true;
         }
+
+        if(AIControlled && Collision.CompareTag("Waypoint"))
+        {
+            Options.Clear();
+            Collision.GetComponent<Collider2D>().isTrigger = true;
+            Debug.Log("blade");
+            foreach (var Point in Collision.GetComponent<WayPoint>().AddedConnections)
+            {
+                
+                Options.Add(Point.MoveDirection);
+            }
+            if (Collision.gameObject.Equals(ChosenDestination))
+            {
+                //ChooseDestination();
+                CheckRoutes();
+                return;
+            }
+
+
+
+        }
+
     }
 
     private void OnTriggerExit2D(Collider2D Collision)
@@ -245,7 +312,15 @@ public class EntityBase : MonoBehaviour
         {
             InStartingArea = false;
         }
+
+        if (AIControlled && Collision.CompareTag("Waypoint"))
+        {
+            Collision.GetComponent<Collider2D>().isTrigger = false;
+
+        }
     }
+
+
 
 }
 

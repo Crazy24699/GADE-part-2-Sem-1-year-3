@@ -12,6 +12,7 @@ TagManager:
   - Powerup
   - StartingSquare
   - Triangle
+  - Waypoint
   layers:
   - Default
   - TransparentFX
@@ -26,7 +27,7 @@ TagManager:
   - Pieces
   - ActivePiece
   - Cell
-  - 
+  - Waypoint
   - 
   - 
   - 
