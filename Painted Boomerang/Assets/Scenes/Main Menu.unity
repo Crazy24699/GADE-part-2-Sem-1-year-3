@@ -992,8 +992,11 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   musicSource: {fileID: 671448171}
-  SFXSource: {fileID: 0}
+  SFXSource: {fileID: 1985791401}
   musicClip: {fileID: 8300000, guid: 64a2ad453e1ed5f4e954323af468b94f, type: 3}
+  spinClip: {fileID: 8300000, guid: b638c547ee457f244a4f02d88bf5b6cb, type: 3}
+  moveClip: {fileID: 8300000, guid: b0c5715a187fe7c45a3a747107d7d9fb, type: 3}
+  hitClip: {fileID: 8300000, guid: 184041155765b834793eacf80aea404f, type: 3}
 --- !u!4 &1329756984
 Transform:
   m_ObjectHideFlags: 0
