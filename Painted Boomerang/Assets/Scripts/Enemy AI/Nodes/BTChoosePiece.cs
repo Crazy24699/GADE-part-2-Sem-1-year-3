@@ -172,7 +172,7 @@ public class BTChoosePiece : BTNodeBase
         return BestOption;
     }
 
-    protected void ChechPieceDanger()
+    protected void CheckPieceDanger()
     {
 
     }

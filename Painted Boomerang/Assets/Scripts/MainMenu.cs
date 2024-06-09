@@ -6,9 +6,13 @@ using UnityEngine.SceneManagement;
 public class MainMenu : MonoBehaviour
 {
 
+    public GameObject MainScreenPanel;
+    public GameObject GameSelectionPanel;
+
     public void StartGame()
     {
-        SceneManager.LoadScene("PVP");
+        MainScreenPanel.SetActive(false);
+        GameSelectionPanel.SetActive(true);
     }
 
     public void QuitGame()

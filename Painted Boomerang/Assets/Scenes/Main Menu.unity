@@ -989,7 +989,7 @@ MonoBehaviour:
   m_UiScaleMode: 1
   m_ReferencePixelsPerUnit: 100
   m_ScaleFactor: 1
-  m_ReferenceResolution: {x: 800, y: 600}
+  m_ReferenceResolution: {x: 800, y: 1080}
   m_ScreenMatchMode: 0
   m_MatchWidthOrHeight: 1
   m_PhysicalUnit: 3
@@ -1053,6 +1053,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 907faed19e9eae9488a8399cfaf2f5ed, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  MainScreenPanel: {fileID: 0}
+  GameSelectionPanel: {fileID: 0}
 --- !u!1 &1078155703
 GameObject:
   m_ObjectHideFlags: 0
@@ -1757,7 +1759,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &1803564741
 RectTransform:
   m_ObjectHideFlags: 0
@@ -1795,7 +1797,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!224 &1850324958
 RectTransform:
   m_ObjectHideFlags: 0
