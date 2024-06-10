@@ -1053,8 +1053,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 907faed19e9eae9488a8399cfaf2f5ed, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  MainScreenPanel: {fileID: 0}
-  GameSelectionPanel: {fileID: 0}
+  MainScreenPanel: {fileID: 1850324957}
+  GameSelectionPanel: {fileID: 1803564740}
 --- !u!1 &1078155703
 GameObject:
   m_ObjectHideFlags: 0
