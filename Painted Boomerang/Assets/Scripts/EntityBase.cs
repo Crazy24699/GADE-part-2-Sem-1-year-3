@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using System.Xml.Linq;
+using Unity.Burst.CompilerServices;
 using Unity.VisualScripting;
 using UnityEditor;
 using UnityEngine;
@@ -10,29 +11,58 @@ using UnityEngine.UI;
 public class EntityBase : MonoBehaviour
 {
     //Bools
+    #region Booleans
     private bool AIControlled;
     public bool InStartingArea;
     public bool UpdatedMovepoints;
+    public bool UpdateMoveOptions;
+    public bool CanMove = false;
+    public bool AdvancedMover = false;
+    #endregion
 
     //Ints
+    #region Ints
     const int MaxHealth=3;
     public int CurrentHealth;
     public int MouseDistance;
-    public int MovesDoneSinceRefresh;
+    [Space(2)]
+    protected int PreferedYChange;
+
+    #endregion
 
     //Gameobejcts
+    #region GameObjects
     public GameObject DebugHitpoints;
     public GameObject ChosenDestination;
+    public GameObject FinalDestination;
+
+    #endregion
 
     //Vectors
+    #region Vectors
     public Vector2Int CurrentPosition;
-    public List<Vector2> Options = new List<Vector2>();
+    public List<Vector2> AvailableMoveOptions = new List<Vector2>();
+    protected Vector2 LastMove;
+    [Space(2)]
+    protected Vector2 XChange;
+    protected Vector2 YChange;
+    public Vector2 ChosenVectorMove;
+    public Vector2[] AimingDirections =
+    {
+        new Vector2(5,2),
+        new Vector2(1,2),
+        new Vector2(-3,6),
+        new Vector2(10,7.5f),
+        new Vector2(4.56f,9.86f)
+    };
+    protected Vector2 ChosenAimDirection;
+    #endregion
 
+    //Floats
+    public float EnemyPieceDistance;
 
-    [SerializeField] private Color SpriteColor;
 
     //Scripts
-    public UnityEngine.UI.Slider HealthBar;
     public Teams AssignedTeam;
     public PlayerFunctionality PlayerScript;
     [SerializeField] protected EnemyAI EnemyAIScript;
@@ -41,16 +71,35 @@ public class EntityBase : MonoBehaviour
 
     public List<AimDirections> MainDirectionsClass = new List<AimDirections>();
     public List<AttackOptions> AttackPointOptions = new List<AttackOptions>();
-    
-    public float EnemyPieceDistance;
+
+
+    //Unity functionality
+    #region Unity Functionality
+    public LayerMask InteractableLayers;
+    [SerializeField] private Color SpriteColor;
+    public UnityEngine.UI.Slider HealthBar;
+    #endregion
 
     public List<string> BadTags= new List<string>();
+
+    public Collider2D WorldCollider;
 
 
     // Start is called before the first frame update
     void Start()
     {
-        Startup();
+        //Startup();
+        UpdateMoveOptions = true;
+    }
+
+    public void EnableCollider(GameObject Entity)
+    {
+        Collider2D[] Colliders=Entity.GetComponents<Collider2D>();
+        foreach (var Collider in Colliders)
+        {
+            Collider.enabled = true;
+        }
+        //WorldCollider.enabled = true;
     }
 
     public void Startup()
@@ -62,6 +111,18 @@ public class EntityBase : MonoBehaviour
         HealthBar.value = CurrentHealth;
 
         InStartingArea = true;
+        if (AIControlled && FinalDestination != null)
+        {
+            if (transform.position.y > FinalDestination.transform.position.y)
+            {
+                PreferedYChange = 1;
+            }
+            if (transform.position.y <= FinalDestination.transform.position.y)
+            {
+                PreferedYChange = -1;
+            }
+        }
+
 
         this.gameObject.name = this.gameObject.name + PlayerScript.OwnPieces.Count;
 
@@ -101,7 +162,117 @@ public class EntityBase : MonoBehaviour
 
     public void CheckRoutes()
     {
+        CheckMainCardinalDirections();
+        XChange = Vector2.zero;
+        YChange=Vector2.zero;
 
+        int XAxisDistance = SetAxisInformation("X");
+        int YAxisDistance = SetAxisInformation("Y");
+
+
+        if (XAxisDistance > YAxisDistance || YChange == Vector2.zero)
+        {
+            ChosenVectorMove = XChange;
+        }
+        if (YAxisDistance > XAxisDistance || XChange == Vector2.zero)
+        {
+            ChosenVectorMove = YChange;
+        }
+        if (YAxisDistance == XAxisDistance)
+        {
+            int RandomChance = Random.Range(0, 2);
+            switch (RandomChance)
+            {
+                case 0:
+                    ChosenVectorMove = XChange;
+                    break;
+
+                case 1:
+                    ChosenVectorMove = YChange;
+                    break;
+            }
+        }
+
+    }
+
+
+
+    public int SetAxisInformation(string DefinedAxis)
+    {
+        float AxisDistance = 0;
+        float RawAxisDistance;
+
+
+
+        switch (DefinedAxis)
+        {
+            case "X":
+                RawAxisDistance = transform.position.x - FinalDestination.transform.position.x;
+                AxisDistance = Mathf.Abs(RawAxisDistance);
+                bool MoveRight = transform.position.x < FinalDestination.transform.position.x;
+                if (!AvailableMoveOptions.Contains(Vector2.right) && !AvailableMoveOptions.Contains(Vector2.left))
+                {
+                    break;
+                }
+
+                switch (MoveRight)
+                {
+                    case true:
+                        if (AvailableMoveOptions.Contains(Vector2.right))
+                        {
+                            XChange = Vector2.right;
+                        }
+                        break;
+
+                    case false:
+                        if (AvailableMoveOptions.Contains(Vector2.left))
+                        {
+                            XChange = Vector2.left;
+                        }
+
+                        break;
+                }
+
+                break;
+
+            case "Y":
+                RawAxisDistance = transform.position.y - FinalDestination.transform.position.y;
+                AxisDistance = Mathf.Abs(RawAxisDistance);
+                bool MoveUp = transform.position.y < FinalDestination.transform.position.y;
+                if (!AvailableMoveOptions.Contains(Vector2.up) && !AvailableMoveOptions.Contains(Vector2.down))
+                {
+                    break;
+                }
+                if (AvailableMoveOptions.Contains(Vector2.up) && AvailableMoveOptions.Contains(Vector2.down)
+                    && AvailableMoveOptions.Count == 2) 
+                {
+                    YChange = new Vector2(0, PreferedYChange);
+                    ChosenVectorMove = new Vector2(0, PreferedYChange);
+                    break;
+                }
+                switch (MoveUp)
+                {
+                    case true:
+                        if (AvailableMoveOptions.Contains(Vector2.up))
+                        {
+                            YChange = Vector2.up;
+                        }
+                        break;
+
+                    case false:
+                        if (AvailableMoveOptions.Contains(Vector2.down))
+                        {
+                            YChange = Vector2.down;
+                        }
+                        break;
+                }
+
+                break;
+        }
+
+
+
+        return Mathf.RoundToInt(AxisDistance);
     }
 
     protected void ProcessPossibleMoves()
@@ -142,14 +313,11 @@ public class EntityBase : MonoBehaviour
         this.transform.position = new Vector3(CellCord.x, CellCord.y);
     }
 
-    //Checks if the current piece in is LOS of the enemy
-    public bool CheckLOS()
+    public void AdvanceMove()
     {
-        
-        return true;
-    }
 
-    
+        AIMovePiece(ChosenVectorMove);
+    }
 
     public void SelectAttackPiece()
     {
@@ -165,7 +333,38 @@ public class EntityBase : MonoBehaviour
         }
     }
 
+    public void CheckAttackOptions()
+    {
 
+        float AimPointDistance = 0.0f;
+        foreach (var AimPoint in AimingDirections)
+        {
+            SimulateBounces(AimPoint);
+        }
+
+    }
+
+    public float SimulateBounces(Vector2 AimDirection)
+    {
+        Vector2 CurrentRayOrigin = transform.position;
+        Vector2 CurrentRayDirection = AimDirection;
+        Vector2 BestAimDirection = Vector2.zero;
+
+        for (int i = 0; i < 5; i++)
+        {
+            RaycastHit2D HitInfo = Physics2D.Raycast(CurrentRayOrigin, AimDirection, 100.00f, InteractableLayers);
+            
+            if (HitInfo.collider != null)
+            {
+                CurrentRayDirection = Vector2.Reflect(CurrentRayOrigin, HitInfo.normal);
+                CurrentRayOrigin = HitInfo.point;
+
+                Debug.DrawLine(CurrentRayOrigin, HitInfo.point, Color.red);
+            }
+        }
+
+        return 0.0f;
+    }
 
     public void SetRandomAttackPositions()
     {
@@ -258,9 +457,11 @@ public class EntityBase : MonoBehaviour
         this.transform.position += new Vector3(Direction.x * 4, Direction.y * 4, 0);
         PlayerScript.MovesRemaining--;
         UpdatedMovepoints = false;
+        LastMove = Direction * -1;
         //Options.Clear();
         //Debug.Log("Moved");
     }
+
 
 
     private void OnTriggerEnter2D(Collider2D Collision)
@@ -279,13 +480,19 @@ public class EntityBase : MonoBehaviour
 
         if(AIControlled && Collision.CompareTag("Waypoint"))
         {
-            Options.Clear();
+            AvailableMoveOptions.Clear();
             Collision.GetComponent<Collider2D>().isTrigger = true;
             Debug.Log("blade");
+
+            UpdateMoveOptions = true;
             foreach (var Point in Collision.GetComponent<WayPoint>().AddedConnections)
             {
                 
-                Options.Add(Point.MoveDirection);
+                AvailableMoveOptions.Add(Point.MoveDirection);
+                if (AvailableMoveOptions.Contains(LastMove))
+                {
+                    AvailableMoveOptions.Remove(LastMove);
+                }
             }
             if (Collision.gameObject.Equals(ChosenDestination))
             {
@@ -316,6 +523,7 @@ public class EntityBase : MonoBehaviour
         if (AIControlled && Collision.CompareTag("Waypoint"))
         {
             Collision.GetComponent<Collider2D>().isTrigger = false;
+
 
         }
     }

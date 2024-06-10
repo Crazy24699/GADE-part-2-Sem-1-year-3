@@ -52,7 +52,8 @@ public class BTChoosePiece : BTNodeBase
                 
                 
                 case ProgramManager.DifficultyOptions.Hard:
-                    AdvancedPieceSelection();
+                    SelectPiece();
+                    //AdvancedPieceSelection();
                     break;
                     
             }
@@ -104,10 +105,7 @@ public class BTChoosePiece : BTNodeBase
 
     protected void AdvancedPieceSelection()
     {
-        EntityBase ChosenPiece;
-        ChosenPiece = CheckPieceDistances();
-
-
+        EnemyAIScript.ChosenPiece.CheckRoutes();
     }
 
     public void SelectPiece()
@@ -126,11 +124,6 @@ public class BTChoosePiece : BTNodeBase
                     UpdatePieceData(PieceScript);
                 }
 
-            }
-
-            if (PieceScript.CheckLOS() && ProgramManager.ProgramManagerInstance.HardmodeActive)
-            {
-                //Debug.Log("woop");
             }
 
             if (PieceScript.InStartingArea && PieceSelected == null)
