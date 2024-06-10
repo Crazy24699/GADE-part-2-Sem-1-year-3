@@ -76,6 +76,7 @@ public class WorldHandler : MonoBehaviour
 
     public void StartupScripts()
     {
+        Debug.Log("Glow");
         Team1Script.Startup();
         Team2Script.Startup();
 

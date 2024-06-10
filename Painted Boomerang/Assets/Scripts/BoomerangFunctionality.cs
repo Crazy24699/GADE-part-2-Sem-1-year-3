@@ -34,6 +34,7 @@ public class BoomerangFunctionality : MonoBehaviour
 
     void Start()
     {
+        Debug.Log("adoration cease");
         BounceCollider = GetComponent<Collider2D>();
 
         if(Damage == 0)
@@ -118,7 +119,7 @@ public class BoomerangFunctionality : MonoBehaviour
         if (Collision.CompareTag("Entity"))
         {
             EntityBase EntityRef = Collision.GetComponent<EntityBase>();
-            if (EntityRef.AssignedTeam == ThisTeam)
+            if (EntityRef.AssignedTeam == ThisTeam && BouncesRemaining==0)
             {
                 ParentEntity.GetComponent<EntityBase>().PlayerScript.CanPerformAction = true;
                 ParentEntity.GetComponent<EntityBase>().PlayerScript.MovesRemaining--;
