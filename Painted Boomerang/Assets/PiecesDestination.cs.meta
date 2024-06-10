@@ -1,5 +1,9 @@
 fileFormatVersion: 2
+<<<<<<<< HEAD:Painted Boomerang/Assets/PiecesDestination.cs.meta
 guid: 114d0c325ac10de41b335fac82db36a5
+========
+guid: 4c9f574d96cd5a748bc40eab885a0c97
+>>>>>>>> Copy-branch:Painted Boomerang/Assets/ProgramManager.cs.meta
 MonoImporter:
   externalObjects: {}
   serializedVersion: 2
