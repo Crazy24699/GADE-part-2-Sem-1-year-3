@@ -50,16 +50,6 @@ public class EnemyAI : MonoBehaviour
         PiecesInPlay = GetAllPieces();
         BehaviourTreeScript = GameObject.FindObjectOfType<BehaviourTree>();
         BehaviourTreeScript.BehaviourTreeStartup();
-
-        PiecesDestination PathfindingDest = FindObjectOfType<PiecesDestination>();
-        PathfindingDest.Piece1 = ThisPlayerScript.OwnPieces[0].GetComponent<EntityBase>();
-        ThisPlayerScript.OwnPieces[0].FinalDestination = PathfindingDest.Piece1Dest;
-        ThisPlayerScript.OwnPieces[0].AdvancedMover = true;
-
-        PathfindingDest.Piece2 = ThisPlayerScript.OwnPieces[1].GetComponent<EntityBase>();
-        ThisPlayerScript.OwnPieces[1].FinalDestination = PathfindingDest.Piece2Dest;
-        ThisPlayerScript.OwnPieces[1].AdvancedMover = true;
-
     }
 
     void Update()

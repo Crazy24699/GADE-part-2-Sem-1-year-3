@@ -52,18 +52,9 @@ public class PlayerFunctionality : MonoBehaviour
             EnemyAIScript.AssignedTeam = ThisTeam;
             EnemyAIScript.AIStartup();
         }
-        int NameChangeIndex = 0;
         foreach (var Piece in OwnPieces)
         {
             Piece.Startup();
-            Piece.name = Piece.name + NameChangeIndex;
-            Piece.EnableCollider(Piece.gameObject);
-            Piece.AdvancedMover = false;
-            if(NameChangeIndex==0 || NameChangeIndex == 1)
-            {
-                Piece.AdvancedMover = true;
-            }
-            NameChangeIndex++;
         }
 
         HashSet<EntityBase> AllPieces = new HashSet<EntityBase>();
@@ -238,6 +229,7 @@ public class PlayerFunctionality : MonoBehaviour
 
     public void ThrowBoomerang(Vector2 AimPoint)
     {
+        Debug.Log("share the truth");
 
         Vector2 MoveDirection = (AimPoint - new Vector2(SelectedEntity.transform.position.x, SelectedEntity.transform.position.y)).normalized;
         GameObject SpawnedBoomerang= Instantiate(BoomerangObject, SelectedEntity.transform.position, SelectedEntity.transform.rotation);
@@ -251,7 +243,6 @@ public class PlayerFunctionality : MonoBehaviour
             BoomerangeScriptRef.Damage = 100;
             BoomerangeScriptRef.InstantBreak = true;
         }
-        Debug.Log("share the truth");
         SelectedEntity.GetComponent<EntityBase>().RevertColour();
         SelectedEntity = null;
 

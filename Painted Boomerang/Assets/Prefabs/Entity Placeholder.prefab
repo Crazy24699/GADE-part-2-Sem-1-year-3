@@ -206,29 +206,18 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   InStartingArea: 0
   UpdatedMovepoints: 0
-  UpdateMoveOptions: 0
-  CanMove: 0
-  AdvancedMover: 0
   CurrentHealth: 0
   MouseDistance: 0
   DebugHitpoints: {fileID: 5642691001663242805, guid: 3b21efd70db24ce4b861caf6abf4dba1, type: 3}
   ChosenDestination: {fileID: 0}
-  FinalDestination: {fileID: 0}
   CurrentPosition: {x: 0, y: 0}
-  AvailableMoveOptions: []
-  ChosenVectorMove: {x: 0, y: 0}
-  AimingDirections:
-  - {x: 5, y: 2}
-  - {x: 1, y: 2}
-  - {x: -3, y: 6}
-  - {x: 10, y: 7.5}
-  - {x: 4.56, y: 9.86}
-  EnemyPieceDistance: 0
+  Options: []
+  SpriteColor: {r: 0, g: 0, b: 0, a: 0}
+  HealthBar: {fileID: 2055795969501245369}
   AssignedTeam: 0
   PlayerScript: {fileID: 0}
   EnemyAIScript: {fileID: 0}
   TargetPiece: {fileID: 0}
-  LastWaypoint: {fileID: 0}
   MainDirectionsClass:
   - Direction: {x: 1, y: 0}
     AimPoint: {x: 0, y: 0}
@@ -246,17 +235,13 @@ MonoBehaviour:
     AimPoint: {x: 0, y: 0}
     AimDistance: 0
     ObejctTag: 
+  OffsetDirectionsClas: []
   AttackPointOptions: []
-  InteractableLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  SpriteColor: {r: 0, g: 0, b: 0, a: 0}
-  HealthBar: {fileID: 2055795969501245369}
+  EnemyPieceDistance: 0
   BadTags:
   - Entity
   - BreakWall
   - BoundryWall
-  WorldCollider: {fileID: 3331810461701429693}
 --- !u!58 &3331810461701429693
 CircleCollider2D:
   m_ObjectHideFlags: 0
@@ -264,7 +249,7 @@ CircleCollider2D:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 2543501963366461084}
-  m_Enabled: 0
+  m_Enabled: 1
   m_Density: 1
   m_Material: {fileID: 0}
   m_IncludeLayers:
@@ -286,7 +271,7 @@ CircleCollider2D:
   m_CallbackLayers:
     serializedVersion: 2
     m_Bits: 4294967295
-  m_IsTrigger: 1
+  m_IsTrigger: 0
   m_UsedByEffector: 0
   m_UsedByComposite: 0
   m_Offset: {x: 0, y: 0}
@@ -326,7 +311,7 @@ CircleCollider2D:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 2543501963366461084}
-  m_Enabled: 0
+  m_Enabled: 1
   m_Density: 1
   m_Material: {fileID: 0}
   m_IncludeLayers:

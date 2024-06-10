@@ -42,22 +42,9 @@ public class BTAttackNode : BTNodeBase
             return NodeStateOptions.Fail;
         }
 
-        if (!AimPointsUpdated ) 
+        if(!AimPointsUpdated)
         {
-            switch (ProgramManager.ProgramManagerInstance.ChosenDifficulty)
-            {
-                default:
-                case ProgramManager.DifficultyOptions.Easy:
-                    GetAimPoints();
-                    break;
-                case ProgramManager.DifficultyOptions.Hard:
-                    //ChooseBestAimPoint();
-                    GetAimPoints();
-                    break;
-
-            }
-
-            return NodeStateOptions.Running;
+            GetAimPoints();
         }
 
         if (EnemyAIScript.ThisPlayerScript.TurnActive && EnemyAIScript.ThisPlayerScript.MovesRemaining <= 0) 
@@ -79,7 +66,19 @@ public class BTAttackNode : BTNodeBase
 
         else if(EnemyAIScript.EnemyInRange && CanAttack) 
         {
+            Debug.Log("Oh");
+            switch (MissChance)         //Change this, its a placeholder
+            {
+                case <=5:
+                    ThrowingLogic();
+                    Debug.Log("red");
+                    break;
 
+                case > 5:
+                    //Debug.Log("water dream");
+                    ThrowingLogic();
+                    break;
+            }
 
             return NodeStateOptions.Running;
         }
@@ -100,12 +99,6 @@ public class BTAttackNode : BTNodeBase
 
         AimPointsUpdated = true;
         CanAttack = true;
-    }
-
-    protected void ChooseBestAimPoint()
-    {
-        //if(piece)
-        //EnemyAIScript.ChosenPiece.CheckAttackOptions();
     }
 
     protected void ThrowingLogic()

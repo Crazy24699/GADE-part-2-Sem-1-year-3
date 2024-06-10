@@ -30,27 +30,11 @@ public class TestAI : MonoBehaviour
 
     public Vector2 ChosenVectorMove;
 
-
-    float CurrentTime;
-    float CooldownTime = 0.45f;
-
-    public int PriorityYChange = 0;
-
-
     // Start is called before the first frame update
     void Start()
     {
         HasMove = false;
         MovePiece = PieceRef.GetComponent<EntityBase>();
-
-        if (MovePiece.transform.position.y > DestinationRef.transform.position.y)
-        {
-            PriorityYChange = 1;
-        }
-        if (MovePiece.transform.position.y <= DestinationRef.transform.position.y)
-        {
-            PriorityYChange = -1;
-        }
     }
 
     // Update is called once per frame
@@ -59,20 +43,13 @@ public class TestAI : MonoBehaviour
         if(Input.GetKeyDown(KeyCode.O))
         {
             //CheckRoutesDepricated();
-            
+            MovePiece.AIMovePiece(ChosenVectorMove);
             
         }
 
         if(Input.GetKeyDown(KeyCode.C))
         {
             CheckRoutes();
-
-        }
-        MoveLoop();
-        if (MovePiece.UpdateMoveOptions)
-        {
-            CheckRoutes();
-            MovePiece.UpdateMoveOptions = false;
         }
 
         if (Input.GetKeyDown(KeyCode.S))
@@ -85,21 +62,10 @@ public class TestAI : MonoBehaviour
         }
     }
 
-    public void MoveLoop()
-    {
-        CurrentTime -= Time.deltaTime;
-        if (CurrentTime <= 0)
-        {
-            MovePiece.AIMovePiece(ChosenVectorMove);
-            CurrentTime = CooldownTime;
-        }
-
-    }
-
     public void CheckRoutes()
     {
         
-        MoveOptions = MovePiece.AvailableMoveOptions;
+        MoveOptions = MovePiece.Options;
         MovePiece.CheckMainCardinalDirections();
 
         ChosenMoveDirection = "";
@@ -182,14 +148,14 @@ public class TestAI : MonoBehaviour
             {
                 YDirection = -1;
             }
-            int Index = MovePiece.AvailableMoveOptions.FindIndex(Val => Val.y == +YDirection);
+            int Index = MovePiece.Options.FindIndex(Val => Val.y == +YDirection);
             Debug.Log(Index);
             ChosenMove = MoveOptions[Index].ToString();
             MovePiece.AIMovePiece(MoveOptions[Index]);
         }
         else if (XAxisDistance > YAxisDistance)
         {
-            int Index = MovePiece.AvailableMoveOptions.FindIndex(Val => Val.x == +1.0f);
+            int Index = MovePiece.Options.FindIndex(Val => Val.x == +1.0f);
             Debug.Log(Index);
             ChosenMove = MoveOptions[Index].ToString();
             MovePiece.AIMovePiece(MoveOptions[Index]);
@@ -218,8 +184,6 @@ public class TestAI : MonoBehaviour
         float AxisDistance = 0;
         float RawAxisDistance;
 
-
-
         switch (DefinedAxis)
         {
             case "X":
@@ -230,7 +194,6 @@ public class TestAI : MonoBehaviour
                 {
                     break;
                 }
-
                 switch (MoveRight)
                 {
                     case true:
@@ -259,12 +222,6 @@ public class TestAI : MonoBehaviour
                 bool MoveUp = PieceRef.transform.position.y < DestinationRef.transform.position.y;
                 if (!MoveOptions.Contains(Vector2.up) && !MoveOptions.Contains(Vector2.down))
                 {
-                    break;
-                }
-                if (MoveOptions.Contains(Vector2.up) && MoveOptions.Contains(Vector2.down) && MoveOptions.Count == 2)
-                {
-                    YChange = new Vector2(0, PriorityYChange);
-                    ChosenVectorMove = new Vector2(0, PriorityYChange);
                     break;
                 }
                 switch (MoveUp)

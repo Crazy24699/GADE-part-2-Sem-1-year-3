@@ -1363,7 +1363,7 @@ MonoBehaviour:
   ObstacleGridChoices:
   - {fileID: 8443781186803937908, guid: 4011c02fc4e5f3049bdf0d75e782494b, type: 3}
   - {fileID: 5839317973104719953, guid: 5413404fc857ac7439eb999f8a10e073, type: 3}
-  - {fileID: 2276552908690924387, guid: 39fbf26382a6b594fbe2494cf6bee1ba, type: 3}
+  - {fileID: 41116284067720945, guid: 39fbf26382a6b594fbe2494cf6bee1ba, type: 3}
   ChosenObstacleGrid: {fileID: 0}
   PlayPieceRef: {fileID: 2543501963366461084, guid: 5f4bfa46055599a4296a1e672fbb000e, type: 3}
   ActivatedCell: {fileID: 2097079565}

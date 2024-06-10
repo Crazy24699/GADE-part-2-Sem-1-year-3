@@ -94,19 +94,7 @@ public class BTChoice : BTNodeBase
             #region Moves the current selected Piece
             if (CurrentDelayTime <= 0 && RandomAction == 0 && EnemyAIScript.ThisPlayerScript.CanPerformAction)   
             {
-
-                switch (ProgramManager.ProgramManagerInstance.ChosenDifficulty)
-                {
-                    default:
-                    case ProgramManager.DifficultyOptions.Easy:
-                        MoveAction();
-                        break;
-                    case ProgramManager.DifficultyOptions.Hard:
-                        AdvancedMovement();
-                        break;
-
-                }
-
+                MoveAction();
                 return NodeStateOptions.Pass;
             }
             #endregion
@@ -123,23 +111,6 @@ public class BTChoice : BTNodeBase
         }
 
         return NodeStateOptions.Fail;
-    }
-
-    public void AdvancedMovement()
-    {
-        Debug.Log(ChosenPieceRef);
-        switch (ChosenPieceRef.AdvancedMover)
-        {
-            case true:
-                ChosenPieceRef.CheckRoutes();
-                ChosenPieceRef.AdvanceMove();
-                break;
-
-            case false:
-                MoveAction();
-                break;
-        }
-
     }
 
     protected void CheckSightlines()
@@ -179,7 +150,7 @@ public class BTChoice : BTNodeBase
             }
         }
         MoveOptionsNum = MoveOptions.Count;
-        ChosenPieceRef.AvailableMoveOptions = MoveOptions;
+        ChosenPieceRef.Options = MoveOptions;
         EnemyAIScript.ChosenPiece.UpdatedMovepoints = true;
         
     }
@@ -268,6 +239,11 @@ public class BTChoice : BTNodeBase
         ActionChosen = false;
     }
 
+    protected void CheckCollidingObjects()
+    {
+        
+    }
+
     protected void TakeCover()
     {
         RaycastHit2D[] CirclesData = Physics2D.CircleCastAll(ChosenPieceRef.transform.position, 1.25f, Vector2.down, EnemyAIScript.InteractableLayers);
@@ -308,9 +284,9 @@ public class BTChoice : BTNodeBase
     }
 }
 
-public class ActionProbabilities
+public class MoveProbabilities
 {
-    public string ActionName;
+    public string DirectionName;
 
     public Vector2 MoveDirection;
 
