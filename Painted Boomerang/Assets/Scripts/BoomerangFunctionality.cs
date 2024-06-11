@@ -32,8 +32,12 @@ public class BoomerangFunctionality : MonoBehaviour
     private float DamageDownTime = 0.5f;
     private float CurrentTime = 0;
 
+    private float LifetimeCounter = 5.5f;
+    private float RemainingLife;
+
     void Start()
     {
+        RemainingLife = LifetimeCounter;
         Debug.Log("adoration cease");
         BounceCollider = GetComponent<Collider2D>();
 
@@ -53,6 +57,16 @@ public class BoomerangFunctionality : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+
+        if (BouncesRemaining == 0)
+        {
+            if (RemainingLife <= 0)
+            {
+                ParentEntity.GetComponent<EntityBase>().PlayerScript.CanPerformAction = true;
+                ParentEntity.GetComponent<EntityBase>().PlayerScript.MovesRemaining--;
+                Destroy(this.gameObject);
+            }
+        }
         if(!CanApplyDamage)
         {
             CurrentTime -= Time.deltaTime;
